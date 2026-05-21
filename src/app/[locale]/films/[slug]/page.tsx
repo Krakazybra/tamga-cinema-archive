@@ -5,8 +5,8 @@ import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
 import { ShareButton } from '@/components/shared/ShareButton'
 import { CommentsSection } from '@/components/comments/CommentsSection'
-import { db } from '@/lib/db'
-import { dbFilmToFilm, dbPersonToPerson } from '@/lib/content'
+import { films } from '@/data/films'
+import { persons } from '@/data/persons'
 import type { Film } from '@/types'
 
 interface Props {
@@ -15,9 +15,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const dbFilm = await db.film.findUnique({ where: { slug } })
-  if (!dbFilm) return {}
-  const film = dbFilmToFilm(dbFilm)
+  const film = films.find((f) => f.slug === slug)
+  if (!film) return {}
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
     title: `${film.title[loc]} | Қазақ Киносы`,
@@ -31,17 +30,12 @@ export async function generateMetadata({ params }: Props) {
 export default async function FilmDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const dbFilm = await db.film.findUnique({ where: { slug } })
+  const film = films.find((f) => f.slug === slug)
 
-  if (!dbFilm) notFound()
-  const film = dbFilmToFilm(dbFilm)
+  if (!film) notFound()
 
-  const [relatedDbFilms, dbPersons] = await Promise.all([
-    db.film.findMany({ where: { slug: { in: film.relatedFilms } } }),
-    db.person.findMany(),
-  ])
-  const relatedFilms = relatedDbFilms.map(dbFilmToFilm).filter((f) => f.slug !== film.slug)
-  const personMap = new Map(dbPersons.map(dbPersonToPerson).map((p) => [p.slug, p]))
+  const relatedFilms = films.filter((f) => film.relatedFilms.includes(f.slug) && f.slug !== film.slug)
+  const personMap = new Map(persons.map((p) => [p.slug, p]))
 
   const labels = {
     kk: {

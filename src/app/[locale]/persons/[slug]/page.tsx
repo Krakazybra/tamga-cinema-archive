@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
-import { db } from '@/lib/db'
-import { dbPersonToPerson, dbFilmToFilm } from '@/lib/content'
+import { persons } from '@/data/persons'
+import { films } from '@/data/films'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -11,9 +11,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const dbPerson = await db.person.findUnique({ where: { slug } })
-  if (!dbPerson) return {}
-  const person = dbPersonToPerson(dbPerson)
+  const person = persons.find((p) => p.slug === slug)
+  if (!person) return {}
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
     title: `${person.name[loc]} | Қазақ Киносы`,
@@ -24,12 +23,11 @@ export async function generateMetadata({ params }: Props) {
 export default async function PersonDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const dbPerson = await db.person.findUnique({ where: { slug } })
+  const person = persons.find((p) => p.slug === slug)
 
-  if (!dbPerson) notFound()
-  const person = dbPersonToPerson(dbPerson)
+  if (!person) notFound()
 
-  const personFilms = (await db.film.findMany({ where: { slug: { in: person.films } } })).map(dbFilmToFilm)
+  const personFilms = films.filter((f) => person.films.includes(f.slug))
 
   const roleLabel: Record<string, Record<string, string>> = {
     kk: { director: 'Режиссер', actor: 'Актер', cinematographer: 'Оператор', writer: 'Сценарист', producer: 'Продюсер' },

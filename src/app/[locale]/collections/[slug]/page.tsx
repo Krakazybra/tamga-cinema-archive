@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
-import { db } from '@/lib/db'
-import { dbCollectionToCollection, dbFilmToFilm } from '@/lib/content'
+import { collections } from '@/data/collections'
+import { films } from '@/data/films'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -11,26 +11,24 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const dbCol = await db.collection.findUnique({ where: { slug } })
-  if (!dbCol) return {}
-  const col = dbCollectionToCollection(dbCol)
+  const collection = collections.find((c) => c.slug === slug)
+  if (!collection) return {}
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
-    title: `${col.title[loc]} | Қазақ Киносы`,
-    description: col.description[loc],
-    openGraph: { images: [col.cover] },
+    title: `${collection.title[loc]} | Қазақ Киносы`,
+    description: collection.description[loc],
+    openGraph: { images: [collection.cover] },
   }
 }
 
 export default async function CollectionDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const dbCol = await db.collection.findUnique({ where: { slug } })
+  const collection = collections.find((c) => c.slug === slug)
 
-  if (!dbCol) notFound()
-  const collection = dbCollectionToCollection(dbCol)
+  if (!collection) notFound()
 
-  const collectionFilms = (await db.film.findMany({ where: { slug: { in: collection.films } } })).map(dbFilmToFilm)
+  const collectionFilms = films.filter((f) => collection.films.includes(f.slug))
 
   const labels = {
     kk: { curator: 'Куратордың ескертпелері', era: 'Дәуір', films: 'фильм' },
