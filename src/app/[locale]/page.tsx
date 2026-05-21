@@ -3,17 +3,17 @@ import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCardLandscape } from '@/components/home/FilmCardLandscape'
 import { HeroCarousel } from '@/components/home/HeroCarousel'
-import { db } from '@/lib/db'
-import { dbFilmToFilm, dbCollectionToCollection } from '@/lib/content'
+import { films as staticFilms } from '@/data/films'
+import { collections as staticCollections } from '@/data/collections'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const [dbFilms, dbCollections] = await Promise.all([
-    db.film.findMany({ orderBy: { year: 'desc' } }),
-    db.collection.findMany({ orderBy: { titleRu: 'asc' } }),
-  ])
-  const films = dbFilms.map(dbFilmToFilm)
-  const collections = dbCollections.map(dbCollectionToCollection)
+  const films = [...staticFilms].sort((a, b) => b.year - a.year)
+  const collections = [...staticCollections].sort((a, b) => {
+    const at = typeof a.title === 'string' ? a.title : a.title.ru
+    const bt = typeof b.title === 'string' ? b.title : b.title.ru
+    return at.localeCompare(bt)
+  })
 
   const featured = films.filter((f) => f.featured)
 

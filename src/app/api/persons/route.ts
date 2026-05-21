@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { dbPersonToPerson } from '@/lib/content'
+import { persons } from '@/data/persons'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -8,12 +7,15 @@ export async function GET(req: Request) {
   const role = searchParams.get('role')
 
   if (slug) {
-    const person = await db.person.findUnique({ where: { slug } })
+    const person = persons.find((p) => p.slug === slug)
     if (!person) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(dbPersonToPerson(person))
+    return NextResponse.json(person)
   }
 
-  const where = role ? { role } : {}
-  const persons = await db.person.findMany({ where, orderBy: { nameRu: 'asc' } })
-  return NextResponse.json(persons.map(dbPersonToPerson))
+  const result = role ? persons.filter((p) => p.role === role) : persons
+  return NextResponse.json([...result].sort((a, b) => {
+    const an = typeof a.name === 'string' ? a.name : a.name.ru
+    const bn = typeof b.name === 'string' ? b.name : b.name.ru
+    return an.localeCompare(bn)
+  }))
 }

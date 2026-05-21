@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
-import { db } from '@/lib/db'
-import { dbCollectionToCollection } from '@/lib/content'
+import { collections as staticCollections } from '@/data/collections'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -18,7 +17,11 @@ export default async function CollectionsPage({ params }: Props) {
   const { locale } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
   const { title, subtitle } = titles[loc] || titles.ru
-  const collections = (await db.collection.findMany({ orderBy: { titleRu: 'asc' } })).map(dbCollectionToCollection)
+  const collections = [...staticCollections].sort((a, b) => {
+    const at = typeof a.title === 'string' ? a.title : a.title.ru
+    const bt = typeof b.title === 'string' ? b.title : b.title.ru
+    return at.localeCompare(bt)
+  })
 
   const labels = {
     kk: { films: 'фильм', view: 'Жинақты қарау', collectionsCount: 'жинақ' },
