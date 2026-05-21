@@ -90,9 +90,9 @@ export function Navbar() {
                 </Button>
               </Link>
 
+              <LanguageSwitcher />
+              <ThemeToggle />
               <div className="hidden lg:flex items-center gap-2">
-                <LanguageSwitcher />
-                <ThemeToggle />
                 <NotificationBell />
               </div>
 
@@ -190,10 +190,8 @@ export function Navbar() {
             </nav>
           </div>
 
-          <div className="px-6 py-5 border-t border-[rgb(var(--border))]/20 flex items-center gap-3">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            {!session?.user && (
+          {!session?.user && (
+            <div className="px-6 py-5 border-t border-[rgb(var(--border))]/20 flex items-center">
               <Link
                 href={`/${locale}/auth/login`}
                 className="ml-auto"
@@ -203,8 +201,8 @@ export function Navbar() {
                   {t('login')}
                 </Button>
               </Link>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </>
