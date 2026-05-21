@@ -1,0 +1,361 @@
+{
+  "nav": {
+    "home": "Home",
+    "films": "Films",
+    "persons": "People",
+    "collections": "Collections",
+    "timeline": "Timeline",
+    "education": "Education",
+    "contacts": "Contacts",
+    "about": "About",
+    "search": "Search",
+    "login": "Sign In",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Sign Out",
+    "admin": "Administration",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "home": {
+    "hero": {
+      "title": "Kazakh Cinema Archive",
+      "subtitle": "Discover the history of Kazakh cinema — from silent films to modern masterpieces",
+      "cta": "Browse Films",
+      "ctaSecondary": "About",
+      "explore": "Explore Archive"
+    },
+    "featured": "Featured Films",
+    "featuredObj": {
+      "title": "Featured Films",
+      "subtitle": "Iconic works of Kazakh cinema"
+    },
+    "timeline": "History in Dates",
+    "education": "Educational Resources",
+    "stats": {
+      "films": "films",
+      "persons": "cinema figures",
+      "years": "years of history",
+      "collections": "collections"
+    },
+    "sections": {
+      "timeline": "History in Dates",
+      "collections": "Thematic Collections",
+      "education": "Educational Resources",
+      "viewAll": "View All"
+    }
+  },
+  "films": {
+    "title": "Film Catalogue",
+    "subtitle": "Complete database of Kazakh cinema",
+    "all": "All Films",
+    "noResults": "No films found",
+    "noResultsHint": "Try changing the filter parameters",
+    "found": "Found",
+    "searchPlaceholder": "Search by title, director, tag...",
+    "filter": {
+      "all": "All",
+      "decade": "Decade",
+      "genre": "Genre",
+      "language": "Language",
+      "mediaType": "Type",
+      "sort": "Sort",
+      "sortYear": "By Year",
+      "sortTitle": "By Title",
+      "sortRelevance": "By Relevance",
+      "reset": "Clear Filters",
+      "loadMore": "Load More"
+    },
+    "genres": {
+      "drama": "Drama",
+      "thriller": "Thriller",
+      "historical": "Historical",
+      "comedy": "Comedy",
+      "documentary": "Documentary",
+      "animation": "Animation",
+      "epic": "Epic",
+      "romance": "Romance",
+      "action": "Action",
+      "art-house": "Art House",
+      "folk": "Folk",
+      "war": "War",
+      "crime": "Crime"
+    },
+    "mediaTypes": {
+      "film": "Feature Film",
+      "documentary": "Documentary",
+      "short": "Short Film",
+      "animation": "Animation"
+    },
+    "languages": {
+      "kk": "Kazakh",
+      "ru": "Russian",
+      "mixed": "Mixed"
+    },
+    "detail": {
+      "synopsis": "Synopsis",
+      "crew": "Film Crew",
+      "cast": "Cast",
+      "gallery": "Gallery",
+      "related": "Related Films",
+      "archiveInfo": "Archive Information",
+      "director": "Director",
+      "cinematographer": "Cinematographer",
+      "screenwriter": "Screenwriter",
+      "studio": "Studio",
+      "year": "Release Year",
+      "duration": "Duration",
+      "archiveId": "Archive Number",
+      "language": "Language",
+      "mediaType": "Type",
+      "minutes": "min",
+      "video": {
+        "player": "Video Player",
+        "subtitles": "Subtitles",
+        "noVideo": "Video not available"
+      }
+    },
+    "actions": {
+      "like": "Like",
+      "liked": "Liked",
+      "share": "Share",
+      "addToFavorites": "Add to Favourites",
+      "removeFromFavorites": "Remove from Favourites"
+    }
+  },
+  "persons": {
+    "title": "People",
+    "subtitle": "Directors, actors and masters of Kazakh cinema",
+    "all": "All",
+    "roles": {
+      "director": "Directors",
+      "actor": "Actors",
+      "cinematographer": "Cinematographers",
+      "writer": "Screenwriters",
+      "producer": "Producers"
+    },
+    "detail": {
+      "biography": "Biography",
+      "filmography": "Filmography",
+      "born": "Birth Year",
+      "died": "Death Year",
+      "role": "Specialisation"
+    },
+    "noResults": "No people found"
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Thematic selections of Kazakh cinema",
+    "films": "films",
+    "curatorNotes": "Curator's Notes",
+    "era": "Era",
+    "viewCollection": "View Collection",
+    "noFilms": "No films added"
+  },
+  "timeline": {
+    "title": "Timeline of Kazakh Cinema",
+    "subtitle": "90 years of history in dates and events",
+    "eras": {
+      "early": "Early Period",
+      "soviet": "Soviet Era",
+      "independence": "Independence Era",
+      "modern": "Modern Times"
+    },
+    "eraYears": {
+      "early": "1934–1950",
+      "soviet": "1951–1991",
+      "independence": "1991–2005",
+      "modern": "2006–present"
+    },
+    "types": {
+      "film": "Film",
+      "event": "Event",
+      "milestone": "Milestone"
+    }
+  },
+  "education": {
+    "title": "Educational Resources",
+    "subtitle": "Materials for studying Kazakh cinema",
+    "tabs": {
+      "teachers": "For Teachers",
+      "students": "For Students",
+      "researchers": "For Researchers"
+    },
+    "teachers": {
+      "title": "For Teachers",
+      "description": "Methodological materials, curricula and recommended films for studying the history of Kazakh cinema at universities and schools.",
+      "downloadGuide": "Download Methodological Guide",
+      "curriculum": "Curriculum",
+      "featuredFilms": "Recommended Films"
+    },
+    "students": {
+      "title": "For Students",
+      "description": "Materials for independent study: essays, reviews, archival documents and links to additional literature.",
+      "downloadMaterials": "Download Materials",
+      "studyGuide": "Study Guide",
+      "featuredFilms": "Films to Study"
+    },
+    "researchers": {
+      "title": "For Researchers",
+      "description": "Academic articles, archival data, bibliography and access to primary sources for academic research.",
+      "downloadData": "Download Data",
+      "bibliography": "Bibliography",
+      "featuredFilms": "Key Films"
+    },
+    "download": "Download",
+    "materials": "Materials"
+  },
+  "about": {
+    "title": "About the Project",
+    "mission": {
+      "title": "Our Mission",
+      "text": "Qazaq Kino is a digital archive of Kazakh cinema created to preserve, study and promote the rich heritage of Kazakh film. We unite researchers, educators and film lovers around a unique cultural heritage."
+    },
+    "team": {
+      "title": "Project Team",
+      "subtitle": "The people creating this archive"
+    },
+    "partners": {
+      "title": "Partners",
+      "subtitle": "Organisations supporting the project"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "name": "Your Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send",
+      "success": "Message sent",
+      "placeholder": {
+        "name": "Enter your name",
+        "email": "Enter email",
+        "message": "Write your message..."
+      }
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search films, people, collections...",
+    "noResults": "Nothing found",
+    "noResultsHint": "Try a different search query",
+    "results": "Search Results",
+    "resultsCount": "Results found",
+    "filters": "Filters",
+    "searchIn": {
+      "all": "Everywhere",
+      "films": "Films",
+      "persons": "People",
+      "collections": "Collections"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Enter your credentials",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "error": "Invalid email or password",
+      "noAccount": "No account?",
+      "register": "Register",
+      "placeholder": {
+        "email": "your@email.kz",
+        "password": "Enter password"
+      }
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Register for full access",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Register",
+      "error": "Email already taken",
+      "hasAccount": "Already have an account?",
+      "login": "Sign In",
+      "placeholder": {
+        "name": "Your name",
+        "email": "your@email.kz",
+        "password": "Minimum 6 characters"
+      }
+    }
+  },
+  "profile": {
+    "title": "My Account",
+    "tabs": {
+      "favorites": "Favourites",
+      "comments": "My Comments",
+      "upload": "File Upload",
+      "settings": "Settings"
+    },
+    "favorites": {
+      "title": "Favourite Films",
+      "empty": "You have no favourite films",
+      "emptyHint": "Like films to add them here"
+    },
+    "comments": {
+      "title": "My Comments",
+      "empty": "You haven't left any comments yet"
+    },
+    "upload": {
+      "title": "File Upload",
+      "description": "Upload archival materials: photos, documents, subtitles"
+    },
+    "settings": {
+      "title": "Profile Settings",
+      "name": "Display Name",
+      "language": "Interface Language",
+      "theme": "Theme",
+      "save": "Save Changes",
+      "saved": "Changes saved"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No new notifications",
+    "markAllRead": "Mark all as read",
+    "newComment": "New comment",
+    "newLike": "New like",
+    "types": {
+      "comment": "Comment",
+      "like": "Like",
+      "system": "System"
+    }
+  },
+  "comments": {
+    "title": "Comments",
+    "placeholder": "Write a comment...",
+    "submit": "Submit",
+    "empty": "No comments yet",
+    "emptyHint": "Be the first to leave a comment",
+    "loginRequired": "Sign in to comment",
+    "loginLink": "Sign In",
+    "loading": "Loading comments...",
+    "error": "Error loading comments"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "more": "More",
+    "less": "Less",
+    "share": "Share",
+    "copy": "Copy",
+    "copied": "Copied",
+    "notFound": "Page Not Found",
+    "notFoundText": "The page you are looking for does not exist or has been moved.",
+    "goHome": "Go Home",
+    "goCatalog": "Go to Catalogue",
+    "goSearch": "Go to Search",
+    "goBack": "Go Back"
+  }
+}

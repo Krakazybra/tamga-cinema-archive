@@ -1,0 +1,155 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String
+  password      String
+  role          String         @default("USER")
+  comments      Comment[]
+  likes         Like[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  filmSlug  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  filmSlug  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([filmSlug, userId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  read      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Film {
+  id                  String   @id @default(cuid())
+  slug                String   @unique
+  titleKk             String
+  titleRu             String
+  titleEn             String
+  year                Int
+  decade              String
+  genres              String   @default("[]")
+  tags                String   @default("[]")
+  synopsisKk          String   @default("")
+  synopsisRu          String   @default("")
+  synopsisEn          String   @default("")
+  poster              String   @default("")
+  banner              String   @default("")
+  gallery             String   @default("[]")
+  director            String   @default("")
+  cinematographer     String   @default("")
+  screenwriter        String   @default("")
+  cast                String   @default("[]")
+  studioKk            String   @default("")
+  studioRu            String   @default("")
+  studioEn            String   @default("")
+  duration            Int      @default(0)
+  language            String   @default("ru")
+  mediaType           String   @default("film")
+  archiveId           String   @default("")
+  collections         String   @default("[]")
+  relatedFilms        String   @default("[]")
+  featured            Boolean  @default(false)
+  historicalRelevance Int      @default(0)
+  videoUrl            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Person {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  nameKk    String
+  nameRu    String
+  nameEn    String
+  role      String
+  bioKk     String   @default("")
+  bioRu     String   @default("")
+  bioEn     String   @default("")
+  birthYear Int      @default(0)
+  deathYear Int?
+  photo     String   @default("")
+  films     String   @default("[]")
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Collection {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  titleKk        String
+  titleRu        String
+  titleEn        String
+  descriptionKk  String   @default("")
+  descriptionRu  String   @default("")
+  descriptionEn  String   @default("")
+  curatorNotesKk String   @default("")
+  curatorNotesRu String   @default("")
+  curatorNotesEn String   @default("")
+  cover          String   @default("")
+  films          String   @default("[]")
+  era            String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  order     Int      @default(0)
+  nameRu    String
+  nameKk    String   @default("")
+  nameEn    String   @default("")
+  roleRu    String   @default("")
+  roleKk    String   @default("")
+  roleEn    String   @default("")
+  quoteRu   String   @default("")
+  skills    String   @default("[]")
+  photo     String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model TimelineEvent {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  year          Int
+  titleKk       String
+  titleRu       String
+  titleEn       String
+  descriptionKk String   @default("")
+  descriptionRu String   @default("")
+  descriptionEn String   @default("")
+  type          String   @default("event")
+  filmSlug      String?
+  image         String?
+  era           String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

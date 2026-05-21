@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Қазақ Киносы — Архив казахского кино
 
-## Getting Started
+Мультиязычный веб-архив казахского кино (kk/ru/en) с полным backend, авторизацией, комментариями, уведомлениями и загрузкой файлов.
 
-First, run the development server:
+## Tech Stack
+
+| Компонент | Технология |
+|---|---|
+| Framework | Next.js 15 App Router + TypeScript |
+| Стили | TailwindCSS v4 + shadcn/ui |
+| Анимации | Framer Motion |
+| i18n | next-intl (URL routing: /kk/, /ru/, /en/) |
+| Поиск | Fuse.js (нечёткий поиск) |
+| Auth | NextAuth.js v5 (JWT + роли) |
+| ORM | Prisma v5 |
+| БД | SQLite |
+| Мониторинг | Sentry |
+| Деплой | Vercel |
+| CI/CD | GitHub Actions |
+| Контейнер | Docker |
+
+## Запуск локально
 
 ```bash
+# 1. Установить зависимости
+npm install
+
+# 2. Настроить переменные окружения
+cp .env.local.example .env.local
+# Вставьте NEXTAUTH_SECRET: openssl rand -base64 32
+
+# 3. Создать БД и применить схему
+npx prisma db push
+
+# 4. Заполнить тестовыми данными
+npx prisma db seed
+
+# 5. Запустить dev сервер
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть: http://localhost:3000/ru/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Тестовые аккаунты
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Email | Пароль | Роль |
+|---|---|---|
+| admin@kazfilm.kz | admin123 | ADMIN |
+| user@test.kz | user123 | USER |
 
-## Learn More
+## API Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+| Метод | Путь | Описание |
+|---|---|---|
+| POST | /api/auth/[...nextauth] | NextAuth handlers |
+| POST | /api/register | Регистрация пользователя |
+| GET | /api/comments?filmSlug= | Получить комментарии |
+| POST | /api/comments | Добавить комментарий (auth) |
+| GET | /api/likes?filmSlug= | Счётчик лайков |
+| POST | /api/likes | Toggle лайк (auth) |
+| GET | /api/notifications | Уведомления пользователя (auth) |
+| PATCH | /api/notifications | Отметить всё прочитанным (auth) |
+| POST | /api/upload | Загрузка файла (auth, max 50MB) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Структура проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── api/                 # REST API routes
+│   └── [locale]/            # Локализованные страницы
+├── components/
+│   ├── layout/              # Navbar, Footer
+│   ├── films/               # FilmCard, FiltersPanel
+│   ├── persons/             # PersonCard
+│   ├── comments/            # CommentsSection (polling 5s)
+│   ├── upload/              # FileUpload
+│   └── shared/              # AnimatedSection, ShareButton, NotificationBell...
+├── data/                    # Mock данные (20 фильмов, 15 персон...)
+├── lib/                     # db.ts, search.ts, utils.ts
+├── store/                   # Zustand (theme, filters, search)
+├── types/                   # TypeScript интерфейсы
+└── messages/                # Переводы kk/ru/en
+```
 
-## Deploy on Vercel
+## Архитектура
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Модульная архитектура на основе Next.js App Router. Компоненты разделены по доменам (films, persons, collections). Backend реализован через Next.js API Routes. База данных SQLite + Prisma ORM. Готова к выделению в микросервисы.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Деплой на Vercel
+
+```bash
+# Установить Vercel CLI
+npm i -g vercel
+
+# Деплой
+vercel deploy
+
+# Установить переменные окружения в Vercel Dashboard:
+# NEXTAUTH_SECRET, NEXTAUTH_URL, DATABASE_URL
+```
+
+## Docker
+
+```bash
+docker build -t kazakh-cinema .
+docker run -p 3000:3000 -e DATABASE_URL=file:./dev.db -e NEXTAUTH_SECRET=secret kazakh-cinema
+```
