@@ -109,7 +109,7 @@ export default function SearchPage() {
               <Clock className="w-4 h-4" /> {t('recent')}
             </h2>
             <Button variant="ghost" size="sm" onClick={clearRecent} className="text-xs">
-              Очистить
+              {t('clear')}
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -128,7 +128,7 @@ export default function SearchPage() {
       )}
 
       {query && results.length === 0 && debounced === query && (
-        <EmptyState title={t('noResults')} description={`По запросу «${query}» ничего не найдено`} />
+        <EmptyState title={t('noResults')} description={t('noResultsHint')} />
       )}
 
       {results.length > 0 && (

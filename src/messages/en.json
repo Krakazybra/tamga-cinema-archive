@@ -240,6 +240,7 @@
     "placeholder": "Search films, people, collections...",
     "noResults": "Nothing found",
     "noResultsHint": "Try a different search query",
+    "clear": "Clear",
     "results": "Search Results",
     "resultsCount": "Results found",
     "filters": "Filters",

@@ -7,6 +7,7 @@ import { ShareButton } from '@/components/shared/ShareButton'
 import { CommentsSection } from '@/components/comments/CommentsSection'
 import { films } from '@/data/films'
 import { persons } from '@/data/persons'
+import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
 
 interface Props {
@@ -109,7 +110,7 @@ export default async function FilmDetailPage({ params }: Props) {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 p-8 flex gap-8 items-end max-w-7xl mx-auto">
           <div className="relative w-40 h-60 rounded-xl overflow-hidden shadow-2xl shrink-0 hidden md:block">
@@ -119,14 +120,14 @@ export default async function FilmDetailPage({ params }: Props) {
             <div className="flex flex-wrap gap-2">
               {film.genres.slice(0, 3).map((g) => (
                 <span key={g} className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium border border-amber-500/30">
-                  {g}
+                  {getGenreLabel(g, loc)}
                 </span>
               ))}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               {film.title[loc]}
             </h1>
-            <p className="text-zinc-400 text-lg">{film.year} · {film.duration} {t.min}</p>
+            <p className="text-[rgb(var(--muted))] text-lg">{film.year} · {film.duration} {t.min}</p>
           </div>
         </div>
       </section>

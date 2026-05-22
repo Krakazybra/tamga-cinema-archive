@@ -94,7 +94,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/95 via-zinc-950/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                   <div className="flex flex-wrap gap-2 mb-3">
                     <span className="text-xs px-2.5 py-1 rounded-full border border-[rgb(var(--accent))]/40 text-[rgb(var(--accent))]">
@@ -107,7 +107,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <h2 className="font-display text-2xl md:text-4xl text-white font-bold mb-3 leading-tight">
                     {(spotlightCollection.title as Record<string, string>)[locale] ?? spotlightCollection.title.ru}
                   </h2>
-                  <p className="text-zinc-300 max-w-2xl text-sm md:text-base line-clamp-2 mb-6">
+                  <p className="text-white/80 max-w-2xl text-sm md:text-base line-clamp-2 mb-6">
                     {(spotlightCollection.description as Record<string, string>)[locale] ?? spotlightCollection.description.ru}
                   </p>
                   <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[rgb(var(--accent))] text-black font-semibold text-sm transition-colors group-hover:bg-[rgb(var(--accent))]/90">
@@ -145,7 +145,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                     <div className="absolute bottom-3 left-3">
                       <span className="text-xs px-2 py-0.5 rounded-full border border-[rgb(var(--accent))]/40 text-[rgb(var(--accent))]">
                         {col.era}

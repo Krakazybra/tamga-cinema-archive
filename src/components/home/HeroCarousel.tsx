@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { persons } from '@/data/persons'
+import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
 
 const personMap = new Map(persons.map((p) => [p.slug, p.name]))
@@ -38,7 +39,7 @@ export function HeroCarousel({ films, locale }: Props) {
   const archiveLabel = locale === 'kk' ? 'Мұрағат' : locale === 'en' ? 'Archive' : 'Архив'
 
   return (
-    <section className="relative min-h-[88vh] flex items-end md:items-center overflow-hidden bg-zinc-950">
+    <section className="relative min-h-[88vh] flex items-end md:items-center overflow-hidden bg-black">
       {/* Backdrop */}
       <AnimatePresence initial={false}>
         <motion.div
@@ -60,8 +61,8 @@ export function HeroCarousel({ films, locale }: Props) {
       </AnimatePresence>
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/98 via-zinc-950/60 to-zinc-950/10" />
-      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-transparent to-zinc-950/30 md:from-zinc-950/70 md:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 md:from-black/70 md:to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 pb-28 pt-24 md:py-20">
@@ -85,21 +86,21 @@ export function HeroCarousel({ films, locale }: Props) {
                     key={g}
                     className="text-xs px-2.5 py-0.5 rounded-full border border-[rgb(var(--accent))]/40 text-[rgb(var(--accent))]"
                   >
-                    {g}
+                    {getGenreLabel(g, locale)}
                   </span>
                 ))}
               </div>
               <h1 className="font-display text-4xl sm:text-5xl font-bold text-white leading-tight">
                 {title}
               </h1>
-              <p className="text-zinc-300 text-base leading-relaxed line-clamp-2">
+              <p className="text-white/80 text-base leading-relaxed line-clamp-2">
                 {synopsis}
               </p>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-white/60 text-sm">
                 {directorLabel}:{' '}
-                <span className="text-zinc-200">{dirLabel}</span>
-                <span className="mx-2 text-zinc-600">·</span>
-                <span className="text-zinc-400">{film.year}</span>
+                <span className="text-white/90">{dirLabel}</span>
+                <span className="mx-2 text-white/30">·</span>
+                <span className="text-white/60">{film.year}</span>
               </p>
               <div className="flex gap-3 pt-2">
                 <Link

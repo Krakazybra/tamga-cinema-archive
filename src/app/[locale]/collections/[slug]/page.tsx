@@ -48,7 +48,7 @@ export default async function CollectionDetailPage({ params }: Props) {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
             <span className="inline-block px-3 py-1 rounded-full bg-amber-500/90 text-black text-sm font-bold mb-4">
               {collection.era}
@@ -56,7 +56,7 @@ export default async function CollectionDetailPage({ params }: Props) {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               {collection.title[loc]}
             </h1>
-            <p className="text-zinc-300 text-lg">
+            <p className="text-white/80 text-lg">
               {collectionFilms.length} {t.films}
             </p>
           </div>

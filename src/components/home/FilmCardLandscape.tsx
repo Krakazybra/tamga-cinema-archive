@@ -1,6 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { persons } from '@/data/persons'
+import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
+
+const personMap = new Map(persons.map((p) => [p.slug, p.name]))
 
 interface Props {
   film: Film
@@ -9,9 +13,14 @@ interface Props {
 
 export function FilmCardLandscape({ film, locale }: Props) {
   const title = (film.title as Record<string, string>)[locale] ?? film.title.ru
+  const dirName = personMap.get(film.director)
+  const dirLabel = dirName
+    ? (dirName as Record<string, string>)[locale] ?? dirName.ru
+    : film.director.replace(/-/g, ' ')
+
   return (
     <Link href={`/${locale}/films/${film.slug}`} className="group block">
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-900">
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-[rgb(var(--card))]">
         <Image
           src={film.poster}
           alt={title}
@@ -25,7 +34,7 @@ export function FilmCardLandscape({ film, locale }: Props) {
             key={g}
             className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-[rgb(var(--accent))] border border-[rgb(var(--accent))]/30"
           >
-            {g}
+            {getGenreLabel(g, locale)}
           </span>
         ))}
         <span className="absolute top-2 right-2 text-xs bg-black/60 backdrop-blur-sm text-white/90 px-2 py-0.5 rounded-md font-medium">
@@ -33,7 +42,7 @@ export function FilmCardLandscape({ film, locale }: Props) {
         </span>
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <p className="text-white font-semibold text-sm line-clamp-2 leading-snug mb-1">{title}</p>
-          <p className="text-zinc-400 text-xs">{film.director.replace(/-/g, ' ')}</p>
+          <p className="text-[rgb(var(--muted))] text-xs">{dirLabel}</p>
         </div>
       </div>
     </Link>
