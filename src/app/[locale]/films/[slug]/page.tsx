@@ -233,14 +233,18 @@ export default async function FilmDetailPage({ params }: Props) {
           <div>
             <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-4">{t.cast}</h2>
             <div className="flex flex-wrap gap-3">
-              {film.cast.map((actor) => (
-                <span
-                  key={actor}
-                  className="px-4 py-2 rounded-full bg-[rgb(var(--card))] border border-[rgb(var(--border))] text-[rgb(var(--muted))] text-sm"
-                >
-                  {actor}
-                </span>
-              ))}
+              {film.cast.map((slug) => {
+                const p = personMap.get(slug)
+                const name = p ? (p.name as Record<string, string>)[loc] ?? p.name.ru : slug.replace(/-/g, ' ')
+                return (
+                  <span
+                    key={slug}
+                    className="px-4 py-2 rounded-full bg-[rgb(var(--card))] border border-[rgb(var(--border))] text-[rgb(var(--muted))] text-sm capitalize"
+                  >
+                    {name}
+                  </span>
+                )
+              })}
             </div>
           </div>
         )}
