@@ -43,7 +43,7 @@ export default async function PersonDetailPage({ params }: Props) {
   const t = labels[loc]
 
   return (
-      <main className="min-h-screen bg-zinc-950 pt-20">
+      <main className="min-h-screen bg-[rgb(var(--background))] pt-20">
         {/* PERSON HERO */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <AnimatedSection>
@@ -65,18 +65,18 @@ export default async function PersonDetailPage({ params }: Props) {
                   <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium border border-amber-500/30 mb-3">
                     {roleLabel[loc][person.role]}
                   </span>
-                  <h1 className="text-4xl md:text-5xl font-bold text-white">{person.name[loc]}</h1>
+                  <h1 className="text-4xl md:text-5xl font-bold text-[rgb(var(--foreground))]">{person.name[loc]}</h1>
                 </div>
 
                 <div className="flex gap-6 text-sm">
                   <div>
-                    <p className="text-zinc-500 uppercase tracking-wider text-xs mb-1">{t.born}</p>
-                    <p className="text-white font-semibold">{person.birthYear}</p>
+                    <p className="text-[rgb(var(--muted))] uppercase tracking-wider text-xs mb-1">{t.born}</p>
+                    <p className="text-[rgb(var(--foreground))] font-semibold">{person.birthYear}</p>
                   </div>
                   {person.deathYear && (
                     <div>
-                      <p className="text-zinc-500 uppercase tracking-wider text-xs mb-1">{t.died}</p>
-                      <p className="text-white font-semibold">{person.deathYear}</p>
+                      <p className="text-[rgb(var(--muted))] uppercase tracking-wider text-xs mb-1">{t.died}</p>
+                      <p className="text-[rgb(var(--foreground))] font-semibold">{person.deathYear}</p>
                     </div>
                   )}
                 </div>
@@ -88,20 +88,20 @@ export default async function PersonDetailPage({ params }: Props) {
         {/* BIOGRAPHY */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <AnimatedSection>
-            <h2 className="text-2xl font-bold text-white mb-6">{t.bio}</h2>
-            <p className="text-zinc-300 text-lg leading-relaxed max-w-4xl">{person.bio[loc]}</p>
+            <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-6">{t.bio}</h2>
+            <p className="text-[rgb(var(--muted))] text-lg leading-relaxed max-w-4xl">{person.bio[loc]}</p>
           </AnimatedSection>
         </section>
 
         {/* FILMOGRAPHY */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
           <AnimatedSection>
-            <h2 className="text-2xl font-bold text-white mb-8">
+            <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-8">
               {t.filmography}
-              <span className="ml-3 text-lg text-zinc-500">({personFilms.length})</span>
+              <span className="ml-3 text-lg text-[rgb(var(--muted))]">({personFilms.length})</span>
             </h2>
             {personFilms.length === 0 ? (
-              <p className="text-zinc-500">{t.noFilms}</p>
+              <p className="text-[rgb(var(--muted))]">{t.noFilms}</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {personFilms.map((film) => (
