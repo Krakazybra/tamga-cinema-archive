@@ -34,11 +34,14 @@ export function NotificationBell() {
     }
   }
 
+  const userId = session?.user?.id
+
   useEffect(() => {
+    if (!userId) return
     fetchNotifications()
     const interval = setInterval(fetchNotifications, 30000)
     return () => clearInterval(interval)
-  }, [session])
+  }, [userId])
 
   const markAllRead = async () => {
     await fetch('/api/notifications', { method: 'PATCH' })

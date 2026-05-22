@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { EmptyState } from '@/components/shared/EmptyState'
@@ -58,11 +58,10 @@ export function CommentsSection({ filmSlug, locale }: Props) {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const userRole = (session?.user as { role?: string })?.role
 
-  const fetchComments = async () => {
+  const refetch = useCallback(async () => {
     try {
       const res = await fetch(`/api/comments?filmSlug=${filmSlug}`)
       if (res.ok) {
@@ -70,19 +69,33 @@ export function CommentsSection({ filmSlug, locale }: Props) {
         setComments(data)
       }
     } catch {
-      // silently fail on polling errors
+      // silently ignore
     } finally {
       setLoading(false)
     }
-  }
+  }, [filmSlug])
 
   useEffect(() => {
-    fetchComments()
-    intervalRef.current = setInterval(fetchComments, 5000)
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+    const controller = new AbortController()
+
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/comments?filmSlug=${filmSlug}`, {
+          signal: controller.signal,
+        })
+        if (res.ok) {
+          const data = await res.json()
+          setComments(data)
+        }
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') return
+      } finally {
+        setLoading(false)
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    load()
+    return () => controller.abort()
   }, [filmSlug])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,7 +112,7 @@ export function CommentsSection({ filmSlug, locale }: Props) {
       })
       if (res.ok) {
         setContent('')
-        await fetchComments()
+        await refetch()
       } else {
         const data = await res.json()
         setError(data.error || 'Ошибка при отправке комментария')
@@ -113,7 +126,7 @@ export function CommentsSection({ filmSlug, locale }: Props) {
 
   const handleDelete = async (id: string) => {
     const res = await fetch(`/api/comments?id=${id}`, { method: 'DELETE' })
-    if (res.ok) await fetchComments()
+    if (res.ok) await refetch()
   }
 
   const formatDate = (iso: string) => {

@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Upload, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -11,9 +11,16 @@ interface FileUploadProps {
 
 export function FileUpload({ onUpload }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const progressTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (progressTimer.current) clearTimeout(progressTimer.current)
+    }
+  }, [])
 
   const handleFile = async (file: File) => {
     setUploading(true)
@@ -42,7 +49,7 @@ export function FileUpload({ onUpload }: FileUploadProps) {
       toast.error('Ошибка сети при загрузке')
     } finally {
       setUploading(false)
-      setTimeout(() => setProgress(0), 1500)
+      progressTimer.current = setTimeout(() => setProgress(0), 1500)
     }
   }
 
