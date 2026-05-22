@@ -47,9 +47,6 @@ export default async function LocaleLayout({
       className={`${playfair.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('theme-storage');if(s){var d=JSON.parse(s);if(d&&d.state&&d.state.theme==='dark')document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})()` }} />
-      </head>
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
