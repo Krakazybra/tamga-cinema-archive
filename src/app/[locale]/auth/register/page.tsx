@@ -103,7 +103,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+    <main className="min-h-screen bg-[rgb(var(--background))] flex items-center justify-center px-4">
       {/* BACKGROUND GLOW */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl" />
@@ -115,12 +115,12 @@ export default function RegisterPage() {
           <Link href={`/${locale}`} className="text-2xl font-bold text-amber-400">
             Қазақ Киносы
           </Link>
-          <h1 className="text-3xl font-bold text-white mt-4 mb-2">{copy.title}</h1>
-          <p className="text-zinc-400">{copy.subtitle}</p>
+          <h1 className="text-3xl font-bold text-[rgb(var(--foreground))] mt-4 mb-2">{copy.title}</h1>
+          <p className="text-[rgb(var(--muted))]">{copy.subtitle}</p>
         </div>
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 space-y-5">
+        <form onSubmit={handleSubmit} className="bg-[rgb(var(--card))] border border-[rgb(var(--border))]/20 rounded-2xl p-8 space-y-5">
           {error && (
             <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
               {error}
@@ -128,31 +128,31 @@ export default function RegisterPage() {
           )}
 
           <div>
-            <label className="block text-zinc-400 text-sm mb-2">{copy.name}</label>
+            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.name}</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={copy.namePh}
               required
-              className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] placeholder-[rgb(var(--muted))]/50 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-zinc-400 text-sm mb-2">{copy.email}</label>
+            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.email}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={copy.emailPh}
               required
-              className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] placeholder-[rgb(var(--muted))]/50 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-zinc-400 text-sm mb-2">{copy.password}</label>
+            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.password}</label>
             <input
               type="password"
               value={password}
@@ -160,7 +160,7 @@ export default function RegisterPage() {
               placeholder={copy.passwordPh}
               minLength={6}
               required
-              className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] placeholder-[rgb(var(--muted))]/50 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
             />
           </div>
 
@@ -174,7 +174,7 @@ export default function RegisterPage() {
         </form>
 
         {/* LOGIN LINK */}
-        <p className="text-center text-zinc-500 mt-6">
+        <p className="text-center text-[rgb(var(--muted))] mt-6">
           {copy.hasAccount}{' '}
           <Link
             href={`/${locale}/auth/login`}

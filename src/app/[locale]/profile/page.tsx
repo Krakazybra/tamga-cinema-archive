@@ -65,17 +65,17 @@ export default async function ProfilePage({ params, searchParams }: Props) {
     }).format(d)
 
   return (
-      <main className="min-h-screen bg-zinc-950 pt-20">
+      <main className="min-h-screen bg-[rgb(var(--background))] pt-20">
         {/* HEADER */}
-        <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-zinc-800">
+        <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-[rgb(var(--border))]/20">
           <AnimatedSection>
             <div className="flex items-center gap-5">
               <div className="w-16 h-16 rounded-full bg-amber-500 flex items-center justify-center text-black text-2xl font-bold shrink-0">
                 {session.user.name?.charAt(0)?.toUpperCase() || session.user.email?.charAt(0)?.toUpperCase() || 'U'}
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white">{session.user.name || session.user.email}</h1>
-                <p className="text-zinc-400">{session.user.email}</p>
+                <h1 className="text-3xl font-bold text-[rgb(var(--foreground))]">{session.user.name || session.user.email}</h1>
+                <p className="text-[rgb(var(--muted))]">{session.user.email}</p>
               </div>
             </div>
           </AnimatedSection>
@@ -83,7 +83,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
 
         {/* TABS NAV */}
         <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="flex flex-wrap gap-1 border-b border-zinc-800 mt-6">
+          <div className="flex flex-wrap gap-1 border-b border-[rgb(var(--border))]/20 mt-6">
             {(Object.entries(tabs) as [Tab, string][]).map(([key, label]) => (
               <Link
                 key={key}
@@ -91,7 +91,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                 className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
                   activeTab === key
                     ? 'border-amber-500 text-amber-400'
-                    : 'border-transparent text-zinc-400 hover:text-white'
+                    : 'border-transparent text-[rgb(var(--muted))] hover:text-[rgb(var(--foreground))]'
                 }`}
               >
                 {label}
@@ -106,13 +106,13 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           {/* FAVORITES */}
           {activeTab === 'favorites' && (
             <AnimatedSection>
-              <h2 className="text-2xl font-bold text-white mb-6">
+              <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-6">
                 {tabs.favorites}
-                <span className="ml-3 text-zinc-500 text-lg">({favFilms.length})</span>
+                <span className="ml-3 text-[rgb(var(--muted))] text-lg">({favFilms.length})</span>
               </h2>
               {favFilms.length === 0 ? (
                 <div className="text-center py-16">
-                  <p className="text-zinc-500 text-lg mb-4">
+                  <p className="text-[rgb(var(--muted))] text-lg mb-4">
                     {loc === 'kk' ? 'Таңдаулы фильмдер жоқ' : loc === 'en' ? 'No favourite films' : 'Нет избранных фильмов'}
                   </p>
                   <Link href={`/${loc}/films`} className="text-amber-400 hover:underline">
@@ -132,18 +132,18 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           {/* COMMENTS */}
           {activeTab === 'comments' && (
             <AnimatedSection>
-              <h2 className="text-2xl font-bold text-white mb-6">
+              <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-6">
                 {tabs.comments}
-                <span className="ml-3 text-zinc-500 text-lg">({userComments.length})</span>
+                <span className="ml-3 text-[rgb(var(--muted))] text-lg">({userComments.length})</span>
               </h2>
               {userComments.length === 0 ? (
-                <p className="text-zinc-500">
+                <p className="text-[rgb(var(--muted))]">
                   {loc === 'kk' ? 'Пікірлер жоқ' : loc === 'en' ? 'No comments' : 'Нет комментариев'}
                 </p>
               ) : (
                 <div className="space-y-4">
                   {userComments.map((c) => (
-                    <div key={c.id} className="p-5 rounded-xl bg-zinc-900 border border-zinc-800">
+                    <div key={c.id} className="p-5 rounded-xl bg-[rgb(var(--card))] border border-[rgb(var(--border))]/20">
                       <div className="flex items-center justify-between mb-3">
                         <Link
                           href={`/${loc}/films/${c.filmSlug}`}
@@ -151,9 +151,9 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                         >
                           {c.filmSlug}
                         </Link>
-                        <span className="text-zinc-500 text-sm">{formatDate(c.createdAt)}</span>
+                        <span className="text-[rgb(var(--muted))] text-sm">{formatDate(c.createdAt)}</span>
                       </div>
-                      <p className="text-zinc-300">{c.content}</p>
+                      <p className="text-[rgb(var(--foreground))]/80">{c.content}</p>
                     </div>
                   ))}
                 </div>
@@ -164,8 +164,8 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           {/* UPLOAD */}
           {activeTab === 'upload' && (
             <AnimatedSection>
-              <h2 className="text-2xl font-bold text-white mb-3">{tabs.upload}</h2>
-              <p className="text-zinc-400 mb-8">
+              <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-3">{tabs.upload}</h2>
+              <p className="text-[rgb(var(--muted))] mb-8">
                 {loc === 'kk'
                   ? 'Мұрағат материалдарын жүктеңіз: фотосуреттер, құжаттар, субтитрлер'
                   : loc === 'en'
@@ -179,26 +179,26 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           {/* SETTINGS */}
           {activeTab === 'settings' && (
             <AnimatedSection>
-              <h2 className="text-2xl font-bold text-white mb-8">{tabs.settings}</h2>
+              <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-8">{tabs.settings}</h2>
               <form className="max-w-lg space-y-6">
                 <div>
-                  <label className="block text-zinc-400 text-sm mb-2">
+                  <label className="block text-[rgb(var(--muted))] text-sm mb-2">
                     {loc === 'kk' ? 'Көрсетілетін атау' : loc === 'en' ? 'Display Name' : 'Отображаемое имя'}
                   </label>
                   <input
                     type="text"
                     defaultValue={session.user.name || ''}
-                    className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500"
+                    className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] px-4 py-3 focus:outline-none focus:border-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-zinc-400 text-sm mb-2">
+                  <label className="block text-[rgb(var(--muted))] text-sm mb-2">
                     {loc === 'kk' ? 'Интерфейс тілі' : loc === 'en' ? 'Interface Language' : 'Язык интерфейса'}
                   </label>
                   <select
                     defaultValue={loc}
-                    className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500"
+                    className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] px-4 py-3 focus:outline-none focus:border-amber-500"
                   >
                     <option value="kk">Қазақша</option>
                     <option value="ru">Русский</option>
@@ -207,12 +207,12 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                 </div>
 
                 <div>
-                  <label className="block text-zinc-400 text-sm mb-2">
+                  <label className="block text-[rgb(var(--muted))] text-sm mb-2">
                     {loc === 'kk' ? 'Тақырып' : loc === 'en' ? 'Theme' : 'Тема'}
                   </label>
                   <select
                     defaultValue="dark"
-                    className="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white px-4 py-3 focus:outline-none focus:border-amber-500"
+                    className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] px-4 py-3 focus:outline-none focus:border-amber-500"
                   >
                     <option value="dark">{loc === 'kk' ? 'Күңгірт' : loc === 'en' ? 'Dark' : 'Тёмная'}</option>
                     <option value="light">{loc === 'kk' ? 'Ашық' : loc === 'en' ? 'Light' : 'Светлая'}</option>

@@ -40,10 +40,10 @@ export default function NotFound() {
   const copy = t[locale as keyof typeof t] || t.ru
 
   return (
-    <main className="min-h-screen bg-zinc-950 relative flex items-center justify-center px-4 overflow-hidden">
+    <main className="min-h-screen bg-[rgb(var(--background))] relative flex items-center justify-center px-4 overflow-hidden">
       {/* CINEMATIC BACKGROUND */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-950/30 via-zinc-950 to-zinc-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
         {/* film grain overlay */}
@@ -63,8 +63,8 @@ export default function NotFound() {
         </div>
 
         {/* TEXT */}
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{copy.subtitle}</h1>
-        <p className="text-zinc-400 text-lg mb-10 leading-relaxed">{copy.text}</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-[rgb(var(--foreground))] mb-4">{copy.subtitle}</h1>
+        <p className="text-[rgb(var(--muted))] text-lg mb-10 leading-relaxed">{copy.text}</p>
 
         {/* LINKS */}
         <div className="flex flex-wrap gap-3 justify-center mb-6">
@@ -76,13 +76,13 @@ export default function NotFound() {
           </Link>
           <Link
             href={`/${locale}/films`}
-            className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold transition-colors border border-zinc-700"
+            className="px-6 py-3 rounded-xl bg-[rgb(var(--card))] hover:bg-[rgb(var(--surface))] text-[rgb(var(--foreground))] font-semibold transition-colors border border-[rgb(var(--border))]/30"
           >
             {copy.catalog}
           </Link>
           <Link
             href={`/${locale}/search`}
-            className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold transition-colors border border-zinc-700"
+            className="px-6 py-3 rounded-xl bg-[rgb(var(--card))] hover:bg-[rgb(var(--surface))] text-[rgb(var(--foreground))] font-semibold transition-colors border border-[rgb(var(--border))]/30"
           >
             {copy.search}
           </Link>
@@ -90,7 +90,7 @@ export default function NotFound() {
 
         <button
           onClick={() => router.back()}
-          className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors underline"
+          className="text-[rgb(var(--muted))] hover:text-[rgb(var(--foreground))] text-sm transition-colors underline"
         >
           ← {copy.back}
         </button>
@@ -98,10 +98,10 @@ export default function NotFound() {
         {/* DECORATIVE FILM STRIP */}
         <div className="mt-16 flex justify-center gap-2 opacity-20">
           {Array.from({ length: 7 }).map((_, i) => (
-            <div key={i} className="w-8 h-12 rounded border border-zinc-600 bg-zinc-800 flex flex-col justify-between py-1 px-0.5">
-              <div className="w-full h-1.5 rounded-sm bg-zinc-600" />
-              <div className="w-full h-5 rounded-sm bg-zinc-700" />
-              <div className="w-full h-1.5 rounded-sm bg-zinc-600" />
+            <div key={i} className="w-8 h-12 rounded border border-[rgb(var(--border))]/60 bg-[rgb(var(--card))] flex flex-col justify-between py-1 px-0.5">
+              <div className="w-full h-1.5 rounded-sm bg-[rgb(var(--border))]/60" />
+              <div className="w-full h-5 rounded-sm bg-[rgb(var(--border))]/40" />
+              <div className="w-full h-1.5 rounded-sm bg-[rgb(var(--border))]/60" />
             </div>
           ))}
         </div>
