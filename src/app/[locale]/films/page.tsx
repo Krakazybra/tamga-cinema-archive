@@ -56,10 +56,11 @@ function FilmsContent() {
   }, [])
 
   useEffect(() => {
+    resetFilters()
     const urlDecade = searchParams.get('decade')
     const urlDirector = searchParams.get('director')
     if (urlDecade) setFilter('decade', [urlDecade])
-    if (urlDirector) setFilter('director', urlDirector.replace(/-/g, ' '))
+    if (urlDirector) setFilter('director', urlDirector)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -98,6 +99,7 @@ function FilmsContent() {
       result = result.filter((f) => {
         const readableName = personNameMap.get(f.director)
         return (
+          f.director === dq ||
           f.director.toLowerCase().includes(dq) ||
           (readableName?.ru ?? '').toLowerCase().includes(dq) ||
           (readableName?.kk ?? '').toLowerCase().includes(dq) ||
@@ -264,7 +266,9 @@ function FilmsContent() {
         )}
 
         {/* Film grid — full width */}
-        {filtered.length === 0 ? (
+        {allFilms.length === 0 ? (
+          <FilmGridSkeleton />
+        ) : filtered.length === 0 ? (
           <EmptyState title={t('noResults')} description={t('noResultsHint')} />
         ) : (
           <>

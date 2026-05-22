@@ -27,7 +27,12 @@ export default async function PersonDetailPage({ params }: Props) {
 
   if (!person) notFound()
 
-  const personFilms = films.filter((f) => person.films.includes(f.slug))
+  const personFilms = films.filter((f) =>
+    f.director === person.slug ||
+    f.cast.includes(person.slug) ||
+    f.cinematographer === person.slug ||
+    f.screenwriter === person.slug
+  )
 
   const roleLabel: Record<string, Record<string, string>> = {
     kk: { director: 'Режиссер', actor: 'Актер', cinematographer: 'Оператор', writer: 'Сценарист', producer: 'Продюсер' },
