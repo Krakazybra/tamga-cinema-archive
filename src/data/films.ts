@@ -147,7 +147,7 @@ export const films: Film[] = [
       'https://picsum.photos/seed/igla-4/800/500',
     ],
     director: 'rashid-nugmanov',
-    cinematographer: 'marat-nугманов',
+    cinematographer: 'marat-nugmanov',
     screenwriter: 'bakhyt-kilibekov',
     cast: ['Viktor Tsoi', 'Marina Smirnova', 'Pyotr Mamonov', 'Alexander Bashirov'],
     studio: { kk: 'Қазақфильм', ru: 'Казахфильм', en: 'Kazakhfilm' },
