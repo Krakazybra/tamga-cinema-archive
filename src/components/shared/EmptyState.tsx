@@ -7,8 +7,8 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  title = 'Ничего не найдено',
-  description = 'Попробуйте изменить параметры поиска',
+  title = '—',
+  description,
   icon,
 }: EmptyStateProps) {
   return (

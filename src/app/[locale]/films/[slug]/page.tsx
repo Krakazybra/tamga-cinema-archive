@@ -315,6 +315,7 @@ export default async function FilmDetailPage({ params }: Props) {
           <ShareButton
             title={film.title[loc]}
             url={`/${loc}/films/${film.slug}`}
+            locale={loc}
           />
         </div>
 

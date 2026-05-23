@@ -149,7 +149,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                           href={`/${loc}/films/${c.filmSlug}`}
                           className="text-amber-400 hover:underline font-semibold"
                         >
-                          {c.filmSlug}
+                          {films.find((f) => f.slug === c.filmSlug)?.title[loc] ?? c.filmSlug}
                         </Link>
                         <span className="text-[rgb(var(--muted))] text-sm">{formatDate(c.createdAt)}</span>
                       </div>
@@ -211,7 +211,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                     {loc === 'kk' ? 'Тақырып' : loc === 'en' ? 'Theme' : 'Тема'}
                   </label>
                   <select
-                    defaultValue="dark"
+                    defaultValue="light"
                     className="w-full rounded-xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))]/30 text-[rgb(var(--foreground))] px-4 py-3 focus:outline-none focus:border-amber-500"
                   >
                     <option value="dark">{loc === 'kk' ? 'Күңгірт' : loc === 'en' ? 'Dark' : 'Тёмная'}</option>

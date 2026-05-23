@@ -192,7 +192,7 @@ function FilmsContent() {
               <Button variant="outline" className="gap-2 flex-shrink-0">
                 <SlidersHorizontal className="w-4 h-4" />
                 {locale === 'kk' ? 'Сүзгілер' : locale === 'en' ? 'Filters' : 'Фильтры'}
-                {(mediaType || language || !!director || yearFrom > 0 || yearTo > 0) && (
+                {(decade.length > 0 || genres.length > 0 || mediaType || language || !!director || yearFrom > 0 || yearTo > 0) && (
                   <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent))]" />
                 )}
               </Button>

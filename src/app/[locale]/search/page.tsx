@@ -68,9 +68,9 @@ export default function SearchPage() {
   }
 
   const typeLabel = (type: string) => {
-    if (type === 'film') return t('films')
-    if (type === 'person') return t('persons')
-    return t('collections')
+    if (type === 'film') return t('searchIn.films')
+    if (type === 'person') return t('searchIn.persons')
+    return t('searchIn.collections')
   }
 
   const filmResults = results.filter((r) => r.type === 'film')
@@ -81,7 +81,7 @@ export default function SearchPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="font-display text-4xl font-bold mb-6">{t('placeholder')}</h1>
+      <h1 className="font-display text-4xl font-bold mb-6">{t('title')}</h1>
 
       <div className="relative mb-8">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
@@ -134,9 +134,9 @@ export default function SearchPage() {
       {results.length > 0 && (
         <div className="space-y-8">
           {[
-            { label: t('films'), items: filmResults },
-            { label: t('persons'), items: personResults },
-            { label: t('collections'), items: collectionResults },
+            { label: t('searchIn.films'), items: filmResults },
+            { label: t('searchIn.persons'), items: personResults },
+            { label: t('searchIn.collections'), items: collectionResults },
           ].filter((g) => g.items.length > 0).map((group) => (
             <div key={group.label}>
               <h2 className="text-sm font-semibold text-[rgb(var(--muted))] uppercase tracking-wide mb-3">
