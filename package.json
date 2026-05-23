@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma db push && next build",
+    "build": "prisma generate && prisma db push && npx prisma db seed && next build",
     "start": "next start",
-    "serve": "cp -r .next/static .next/standalone/.next/static 2>/dev/null; cp -r public .next/standalone/public 2>/dev/null; DATABASE_URL=\"file:///Users/ilhamnurahmetov/Documents/projects/Для Темура сайт/prisma/dev.db\" AUTH_TRUST_HOST=true PORT=3000 node .next/standalone/server.js",
+    "serve": "AUTH_TRUST_HOST=true PORT=3000 node .next/standalone/server.js",
     "lint": "eslint"
   },
   "prisma": {
