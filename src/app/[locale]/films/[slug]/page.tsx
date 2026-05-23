@@ -41,7 +41,7 @@ export default async function FilmDetailPage({ params }: Props) {
   const labels = {
     kk: {
       director: 'Режиссер',
-      cinematographer: 'Оператор',
+      cinematographer: 'Оператор-қоюшы',
       screenwriter: 'Сценарист',
       cast: 'Рөлдерде',
       studio: 'Киностудия',

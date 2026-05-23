@@ -5,7 +5,7 @@ import type { Person } from '@/types'
 const roleLabels: Record<string, Record<string, string>> = {
   kk: {
     director: 'Режиссер',
-    cinematographer: 'Оператор',
+    cinematographer: 'Оператор-қоюшы',
     actor: 'Актер',
     writer: 'Сценарист',
     producer: 'Продюсер',
@@ -59,7 +59,7 @@ export function PersonCard({ person, locale, variant = 'default' }: PersonCardPr
     : (locale === 'kk' ? 'Жылдар белгісіз' : locale === 'en' ? 'Years unknown' : 'Годы не указаны')
 
   const derivedTags = [
-    person.role,
+    roleLabel,
     person.birthYear ? `${Math.floor((person.birthYear + 25) / 10) * 10}s` : null,
   ].filter(Boolean) as string[]
 
