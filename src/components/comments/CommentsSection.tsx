@@ -115,10 +115,10 @@ export function CommentsSection({ filmSlug, locale }: Props) {
         await refetch()
       } else {
         const data = await res.json()
-        setError(data.error || 'Ошибка при отправке комментария')
+        setError(data.error || (locale === 'kk' ? 'Пікір жіберу қатесі' : locale === 'en' ? 'Failed to submit comment' : 'Ошибка при отправке комментария'))
       }
     } catch {
-      setError('Ошибка соединения')
+      setError(locale === 'kk' ? 'Байланыс қатесі' : locale === 'en' ? 'Connection error' : 'Ошибка соединения')
     } finally {
       setSubmitting(false)
     }
@@ -226,7 +226,7 @@ export function CommentsSection({ filmSlug, locale }: Props) {
                     <button
                       onClick={() => handleDelete(comment.id)}
                       className="ml-auto text-red-400 hover:text-red-300 text-xs px-2 py-0.5 rounded hover:bg-red-500/10 transition-colors"
-                      title="Удалить комментарий"
+                      title={locale === 'kk' ? 'Пікірді жою' : locale === 'en' ? 'Delete comment' : 'Удалить комментарий'}
                     >
                       ✕
                     </button>

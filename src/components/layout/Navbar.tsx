@@ -67,7 +67,9 @@ export function Navbar() {
               <Film className="w-6 h-6 text-[rgb(var(--primary))]" />
               <div className="flex flex-col">
                 <span className="font-display font-bold text-lg text-[rgb(var(--foreground))] leading-none">TAMGA</span>
-                <span className="text-[rgb(var(--muted))] text-[10px] leading-none hidden sm:block">Архив казахского кино</span>
+                <span className="text-[rgb(var(--muted))] text-[10px] leading-none hidden sm:block">
+                  {locale === 'kk' ? 'Қазақ киносының мұрағаты' : locale === 'en' ? 'Kazakh Cinema Archive' : 'Архив казахского кино'}
+                </span>
               </div>
             </Link>
 
