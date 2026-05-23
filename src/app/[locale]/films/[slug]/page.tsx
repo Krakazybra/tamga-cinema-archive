@@ -5,8 +5,10 @@ import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
 import { ShareButton } from '@/components/shared/ShareButton'
 import { CommentsSection } from '@/components/comments/CommentsSection'
-import { films } from '@/data/films'
-import { persons } from '@/data/persons'
+import { films as staticFilms } from '@/data/films'
+import { persons as staticPersons } from '@/data/persons'
+import { db } from '@/lib/db'
+import { dbFilmToFilm, dbPersonToPerson } from '@/lib/content'
 import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
 
@@ -14,14 +16,20 @@ interface Props {
   params: Promise<{ locale: string; slug: string }>
 }
 
+async function getFilm(slug: string): Promise<Film | null> {
+  const dbFilm = await db.film.findUnique({ where: { slug } }).catch(() => null)
+  if (dbFilm) return dbFilmToFilm(dbFilm)
+  return staticFilms.find((f) => f.slug === slug) ?? null
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const film = films.find((f) => f.slug === slug)
+  const film = await getFilm(slug)
   if (!film) return {}
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
-    title: `${film.title[loc]} | Қазақ Киносы`,
-    description: film.synopsis[loc],
+    title: `${film.title[loc] || film.title.ru} | Қазақ Киносы`,
+    description: film.synopsis[loc] || film.synopsis.ru,
     openGraph: {
       images: [film.banner],
     },
@@ -31,12 +39,24 @@ export async function generateMetadata({ params }: Props) {
 export default async function FilmDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const film = films.find((f) => f.slug === slug)
+  const film = await getFilm(slug)
 
   if (!film) notFound()
 
-  const relatedFilms = films.filter((f) => film.relatedFilms.includes(f.slug) && f.slug !== film.slug)
-  const personMap = new Map(persons.map((p) => [p.slug, p]))
+  const relatedSlugs = film.relatedFilms.filter((s) => s !== slug)
+  const dbRelated = relatedSlugs.length > 0
+    ? await db.film.findMany({ where: { slug: { in: relatedSlugs } } }).catch(() => [])
+    : []
+  const relatedFilms = dbRelated.length > 0
+    ? dbRelated.map(dbFilmToFilm)
+    : staticFilms.filter((f) => relatedSlugs.includes(f.slug))
+
+  const crewSlugs = [film.director, film.cinematographer, film.screenwriter, ...film.cast].filter(Boolean)
+  const dbPersons = crewSlugs.length > 0
+    ? await db.person.findMany({ where: { slug: { in: crewSlugs } } }).catch(() => [])
+    : []
+  const personSource = dbPersons.length > 0 ? dbPersons.map(dbPersonToPerson) : staticPersons
+  const personMap = new Map(personSource.map((p) => [p.slug, p]))
 
   const labels = {
     kk: {

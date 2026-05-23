@@ -179,7 +179,11 @@ function FilmForm({ initial, onSave, onClose, saving, persons }: FilmFormProps) 
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-[rgb(var(--muted))] mb-1">Год</label>
-          <Input type="number" value={d.year ?? ''} onChange={(e) => set('year', Number(e.target.value))} />
+          <Input type="number" value={d.year ?? ''} onChange={(e) => {
+            const yr = Number(e.target.value)
+            set('year', yr)
+            if (yr > 1900) set('decade', `${Math.floor(yr / 10) * 10}s`)
+          }} />
         </div>
         <div>
           <label className="block text-[rgb(var(--muted))] mb-1">Декада</label>
@@ -787,6 +791,8 @@ export default function AdminPage() {
   }
 
   const saveFilm = async (data: Partial<FilmType>) => {
+    if (!data.slug?.trim()) { toast.error('Slug обязателен'); return }
+    if (!data.year) { toast.error('Год обязателен'); return }
     setSaving(true)
     try {
       if (editingId) {
@@ -802,6 +808,8 @@ export default function AdminPage() {
   }
 
   const savePerson = async (data: Partial<PersonType>) => {
+    if (!data.slug?.trim()) { toast.error('Slug обязателен'); return }
+    if (!(data.name as Record<string,string>)?.ru?.trim()) { toast.error('Имя (RU) обязательно'); return }
     setSaving(true)
     try {
       if (editingId) {
@@ -817,6 +825,8 @@ export default function AdminPage() {
   }
 
   const saveCollection = async (data: Partial<CollectionType>) => {
+    if (!data.slug?.trim()) { toast.error('Slug обязателен'); return }
+    if (!(data.title as Record<string,string>)?.ru?.trim()) { toast.error('Название (RU) обязательно'); return }
     setSaving(true)
     try {
       if (editingId) {
@@ -832,6 +842,8 @@ export default function AdminPage() {
   }
 
   const saveTimeline = async (data: Partial<TimelineEvent>) => {
+    if (!data.id?.trim()) { toast.error('Slug/ID обязателен'); return }
+    if (!data.year) { toast.error('Год обязателен'); return }
     setSaving(true)
     try {
       const payload = { ...data, slug: data.id }
@@ -919,6 +931,19 @@ export default function AdminPage() {
             {/* ─── USERS ─── */}
             {tab === 'users' && (
               <>
+                <InfoBlock id="seed-static">
+                  <strong>Первый запуск:</strong> Если БД пуста, нажмите кнопку ниже чтобы загрузить все статические данные в БД. После этого редактирование через панель будет видно на сайте.
+                  <div className="mt-3">
+                    <Button size="sm" variant="outline" onClick={async () => {
+                      const res = await fetch('/api/admin/seed-static', { method: 'POST' })
+                      const data = await res.json()
+                      if (res.ok) toast.success(`Загружено: ${data.seeded.films} фильмов, ${data.seeded.persons} персон, ${data.seeded.collections} коллекций, ${data.seeded.timeline} событий`)
+                      else toast.error(data.error ?? 'Ошибка')
+                    }}>
+                      Загрузить статические данные в БД
+                    </Button>
+                  </div>
+                </InfoBlock>
                 <InfoBlock id="users">
                   <strong>Роли:</strong> ADMIN — полный доступ ко всему. MODERATOR — только вкладка «Комментарии» (удалять спам). USER — обычный пользователь сайта. Нельзя понизить другого ADMIN и нельзя менять свою роль.
                 </InfoBlock>

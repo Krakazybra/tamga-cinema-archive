@@ -5,7 +5,8 @@ import { db } from '@/lib/db'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
 import { FileUpload } from '@/components/upload/FileUpload'
-import { films } from '@/data/films'
+import { films as staticFilms } from '@/data/films'
+import { dbFilmToFilm } from '@/lib/content'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -63,7 +64,16 @@ export default async function ProfilePage({ params, searchParams }: Props) {
     }),
   ])
 
-  const favFilms = films.filter((f) => userLikes.some((l) => l.filmSlug === f.slug))
+  const likedSlugs = userLikes.map((l) => l.filmSlug)
+  const dbFavRows = likedSlugs.length > 0
+    ? await db.film.findMany({ where: { slug: { in: likedSlugs } } }).catch(() => [])
+    : []
+  const dbFavFilms = dbFavRows.map(dbFilmToFilm)
+  const dbFavSlugs = new Set(dbFavFilms.map((f) => f.slug))
+  const favFilms = [
+    ...dbFavFilms,
+    ...staticFilms.filter((f) => likedSlugs.includes(f.slug) && !dbFavSlugs.has(f.slug)),
+  ]
 
   const formatDate = (d: Date) =>
     new Intl.DateTimeFormat(loc === 'kk' ? 'kk-KZ' : loc === 'en' ? 'en-US' : 'ru-RU', {

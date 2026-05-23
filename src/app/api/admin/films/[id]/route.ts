@@ -39,7 +39,7 @@ export async function PUT(req: Request, { params }: Ctx) {
         titleRu: String((body.title as Record<string,string>)?.ru ?? ''),
         titleEn: String((body.title as Record<string,string>)?.en ?? ''),
         year: safeInt(body.year),
-        decade: String(body.decade ?? ''),
+        decade: String(body.decade || `${Math.floor(safeInt(body.year) / 10) * 10}s`),
         genres: JSON.stringify(ensureArray(body.genres)),
         tags: JSON.stringify(ensureArray(body.tags)),
         synopsisKk: String((body.synopsis as Record<string,string>)?.kk ?? ''),

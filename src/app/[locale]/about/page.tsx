@@ -458,29 +458,7 @@ export default async function AboutPage({ params }: Props) {
         </AnimatedSection>
       </section>
 
-      {/* ─── EXPERT INTERVIEWS ─── */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <AnimatedSection>
-          <p className="text-xs uppercase tracking-widest text-[rgb(var(--accent))] font-medium mb-3">{t.expertsLabel}</p>
-          <h2 className="text-4xl font-display font-bold text-[rgb(var(--foreground))] mb-4">{t.expertsTitle}</h2>
-          <p className="text-[rgb(var(--muted))] text-lg max-w-2xl mb-8 leading-relaxed">{t.expertsSub}</p>
-
-          <div className="grid md:grid-cols-2 gap-5">
-            {experts.map((expert, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-[rgb(var(--card))] border border-[rgb(var(--border))]/15 hover:border-[rgb(var(--accent))]/25 transition-colors">
-                <p className="text-xs uppercase tracking-widest text-[rgb(var(--accent))] font-medium mb-3">{loc(expert.category, l)}</p>
-                <h3 className="font-display text-xl font-bold text-[rgb(var(--foreground))] mb-1">
-                  {typeof expert.name === 'string' ? expert.name : loc(expert.name as Record<string, string>, l)}
-                </h3>
-                <p className="text-[rgb(var(--muted))] text-sm mb-4">{loc(expert.position, l)}</p>
-                <blockquote className="border-l-2 border-[rgb(var(--accent))]/40 pl-4">
-                  <p className="text-[rgb(var(--muted))] text-sm italic leading-relaxed">&ldquo;{loc(expert.quote, l)}&rdquo;</p>
-                </blockquote>
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
-      </section>
+      {/* ─── EXPERT INTERVIEWS — hidden, not ready for public ─── */}
 
       {/* ─── PRINCIPLES ─── */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
