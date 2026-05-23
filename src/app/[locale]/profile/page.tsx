@@ -165,7 +165,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                           href={`/${loc}/films/${c.filmSlug}`}
                           className="text-amber-400 hover:underline font-semibold"
                         >
-                          {films.find((f) => f.slug === c.filmSlug)?.title[loc] ?? c.filmSlug}
+                          {staticFilms.find((f) => f.slug === c.filmSlug)?.title[loc] ?? c.filmSlug}
                         </Link>
                         <span className="text-[rgb(var(--muted))] text-sm">{formatDate(c.createdAt)}</span>
                       </div>
