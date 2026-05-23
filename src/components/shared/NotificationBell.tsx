@@ -38,6 +38,7 @@ export function NotificationBell() {
 
   useEffect(() => {
     if (!userId) return
+    // eslint-disable-next-line react-compiler/react-compiler
     fetchNotifications()
     const interval = setInterval(fetchNotifications, 30000)
     return () => clearInterval(interval)
