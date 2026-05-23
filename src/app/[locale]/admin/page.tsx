@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, startTransition } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import {
@@ -52,10 +52,9 @@ const roleBadge: Record<string, string> = {
 // ─── INFO BLOCK ───────────────────────────────────────────────────────────────
 function InfoBlock({ id, children }: { id: string; children: React.ReactNode }) {
   const key = `admin-hint-${id}`
-  const [visible, setVisible] = useState(false)
-  useEffect(() => {
-    setVisible(localStorage.getItem(key) !== 'hidden')
-  }, [key])
+  const [visible, setVisible] = useState(() =>
+    typeof window !== 'undefined' ? localStorage.getItem(key) !== 'hidden' : true
+  )
   const hide = () => { localStorage.setItem(key, 'hidden'); setVisible(false) }
   if (!visible) return null
   return (
@@ -71,8 +70,7 @@ function InfoBlock({ id, children }: { id: string; children: React.ReactNode }) 
 
 // ─── IMAGE PREVIEW ────────────────────────────────────────────────────────────
 function ImagePreview({ url }: { url: string }) {
-  const [ok, setOk] = useState(false)
-  useEffect(() => { setOk(!!url) }, [url])
+  const [ok, setOk] = useState(true)
   if (!url || !ok) return null
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -683,7 +681,7 @@ export default function AdminPage() {
   }, [status, isAdmin, isModerator, locale, router])
 
   useEffect(() => {
-    if (isModerator && !isAdmin) setTab('comments')
+    if (isModerator && !isAdmin) startTransition(() => setTab('comments'))
   }, [isModerator, isAdmin])
 
   useEffect(() => {

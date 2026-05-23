@@ -78,7 +78,7 @@ export default function RegisterPage() {
       })
 
       if (!res.ok) {
-        const data = await res.json()
+        await res.json()
         if (res.status === 409) {
           setError(copy.errorEmail)
         } else {

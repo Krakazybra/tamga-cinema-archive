@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, useEffect, useRef, Suspense } from 'react'
+import { useState, useMemo, useEffect, Suspense } from 'react'
 import Fuse from 'fuse.js'
 import { useLocale, useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
@@ -25,7 +25,7 @@ function FilmsContent() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState('')
   const [view, setView] = useState<'grid' | 'list'>('grid')
-  const fuseRef = useRef<Fuse<Film> | null>(null)
+  const [fuse, setFuse] = useState<Fuse<Film> | null>(null)
   const [sort, setSort] = useState<'year-desc' | 'year-asc' | 'title'>('year-desc')
   const [page, setPage] = useState(1)
   const [allFilms, setAllFilms] = useState<Film[]>([])
@@ -39,7 +39,7 @@ function FilmsContent() {
     ]).then(([films, persons]) => {
       setAllFilms(films)
       setPersonNameMap(new Map((persons as Array<{ slug: string; name: LocalizedString }>).map((p) => [p.slug, p.name])))
-      fuseRef.current = new Fuse(films, {
+      setFuse(new Fuse(films, {
         keys: [
           { name: 'title.ru', weight: 2 },
           { name: 'title.kk', weight: 2 },
@@ -50,9 +50,8 @@ function FilmsContent() {
         ],
         threshold: 0.4,
         includeScore: true,
-      })
+      }))
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -73,8 +72,8 @@ function FilmsContent() {
     let result: Film[] = [...allFilms]
 
     if (query) {
-      if (fuseRef.current) {
-        const fuseResults = fuseRef.current.search(query)
+      if (fuse) {
+        const fuseResults = fuse.search(query)
         const matchedSlugs = new Set(fuseResults.map((r) => r.item.slug))
         result = result.filter((f) => matchedSlugs.has(f.slug))
       } else {
@@ -129,7 +128,7 @@ function FilmsContent() {
     })
 
     return result
-  }, [query, decade, genres, mediaType, language, director, studio, yearFrom, yearTo, sort, locale, allFilms, personNameMap])
+  }, [query, fuse, decade, genres, mediaType, language, director, studio, yearFrom, yearTo, sort, locale, allFilms, personNameMap])
 
   const paginated = filtered.slice(0, page * ITEMS_PER_PAGE)
   const hasMore = paginated.length < filtered.length

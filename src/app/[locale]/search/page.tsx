@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, startTransition } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -37,7 +37,7 @@ export default function SearchPage() {
       fetch('/api/collections').then((r) => r.json()),
     ]).then(([films, persons, collections]: [Film[], Person[], Collection[]]) => {
       buildSearchIndex(films, persons, collections)
-      setIndexReady(true)
+      startTransition(() => setIndexReady(true))
     })
   }, [])
 
@@ -48,12 +48,13 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (!indexReady) return
-    if (debounced) {
-      const res = search(debounced) as ResultItem[]
-      setResults(res)
-    } else {
-      setResults([])
-    }
+    startTransition(() => {
+      if (debounced) {
+        setResults(search(debounced) as ResultItem[])
+      } else {
+        setResults([])
+      }
+    })
   }, [debounced, indexReady])
 
   const handleSearch = useCallback((q: string) => {

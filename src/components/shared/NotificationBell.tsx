@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -24,24 +24,24 @@ export function NotificationBell() {
   const [count, setCount] = useState(0)
   const [items, setItems] = useState<Notification[]>([])
 
-  const fetchNotifications = async () => {
-    if (!session?.user) return
+  const userId = session?.user?.id
+
+  const fetchNotifications = useCallback(async () => {
+    if (!userId) return
     const res = await fetch('/api/notifications')
     if (res.ok) {
       const data = await res.json()
       setCount(data.count)
       setItems(data.items)
     }
-  }
-
-  const userId = session?.user?.id
+  }, [userId])
 
   useEffect(() => {
     if (!userId) return
     fetchNotifications()
     const interval = setInterval(fetchNotifications, 30000)
     return () => clearInterval(interval)
-  }, [userId])
+  }, [userId, fetchNotifications])
 
   const markAllRead = async () => {
     await fetch('/api/notifications', { method: 'PATCH' })
