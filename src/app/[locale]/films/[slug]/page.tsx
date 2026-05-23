@@ -123,18 +123,20 @@ export default async function FilmDetailPage({ params }: Props) {
 
       {/* HERO */}
       <section className="relative h-[70vh] min-h-[480px] overflow-hidden">
-        <Image
-          src={film.banner}
-          alt={film.title[loc]}
-          fill
-          className="object-cover"
-          priority
-        />
+        {film.banner && (
+          <Image
+            src={film.banner}
+            alt={film.title[loc]}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 p-8 flex gap-8 items-end max-w-7xl mx-auto">
           <div className="relative w-40 h-60 rounded-xl overflow-hidden shadow-2xl shrink-0 hidden md:block">
-            <Image src={film.poster} alt={film.title[loc]} fill className="object-cover" />
+            {film.poster && <Image src={film.poster} alt={film.title[loc]} fill className="object-cover" />}
           </div>
           <div className="space-y-3 flex-1">
             <div className="flex flex-wrap gap-2">

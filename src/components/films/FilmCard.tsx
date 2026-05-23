@@ -50,13 +50,15 @@ export function FilmCard({ film, locale }: FilmCardProps) {
       <Link href={`/${locale}/films/${film.slug}`} className="block">
         <div className="relative overflow-hidden rounded-lg bg-[rgb(var(--surface))]">
           <div className="aspect-[2/3] relative overflow-hidden">
-            <Image
-              src={film.poster}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            />
+            {film.poster && (
+              <Image
+                src={film.poster}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
               <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1.5">
                 <div className="flex flex-wrap gap-1">
