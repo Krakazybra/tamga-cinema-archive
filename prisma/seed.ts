@@ -133,7 +133,39 @@ async function main() {
     })
   }
 
-  console.log(`Seeded: ${films.length} films, ${persons.length} persons, ${collections.length} collections, ${timelineEvents.length} timeline events`)
+  // ── Team Members ──────────────────────────────────────────────────
+  const teamMembers = [
+    {
+      order: 1,
+      nameRu: 'Алуа Шодырова', nameKk: 'Алуа Шодырова', nameEn: 'Alua Shodyrova',
+      roleRu: 'ДИЗАЙН · КОНЦЕПЦИЯ · ИНТЕРФЕЙС', roleKk: 'ДИЗАЙН · КОНЦЕПЦИЯ · ИНТЕРФЕЙС', roleEn: 'DESIGN · CONCEPT · INTERFACE',
+      quoteRu: 'Я верю, что архив — это форма уважения. Каждый экран, каждый переход должны говорить: эта история важна.',
+      skills: JSON.stringify(['UX/UI', 'Визуальный язык', 'Разработка']),
+      photo: '',
+    },
+    {
+      order: 2,
+      nameRu: 'Балтабай Диана', nameKk: 'Балтабай Диана', nameEn: 'Baltabay Diana',
+      roleRu: 'ИССЛЕДОВАНИЕ · АРХИВНАЯ ЛОГИКА · СТРУКТУРА', roleKk: 'ЗЕРТТЕУ · МҰРАҒАТ ЛОГИКАСЫ · ҚҰРЫЛЫМ', roleEn: 'RESEARCH · ARCHIVE LOGIC · STRUCTURE',
+      quoteRu: 'Хороший архив — это не база данных. Это навигация. Ты приходишь с вопросом и уходишь с открытием.',
+      skills: JSON.stringify(['Анализ архивов', 'Архивная логика', 'Структура данных']),
+      photo: '',
+    },
+    {
+      order: 3,
+      nameRu: 'Байзак Алуа', nameKk: 'Байзак Алуа', nameEn: 'Bayzak Alua',
+      roleRu: 'КОНТЕНТ · ИНТЕРВЬЮ · АНАЛИТИКА', roleKk: 'МАЗМҰН · СҰХБАТТАР · ТАЛДАУ', roleEn: 'CONTENT · INTERVIEWS · ANALYTICS',
+      quoteRu: 'Кино — это документ. Если не сохранить его сейчас, следующее поколение будет искать то, чего уже нет.',
+      skills: JSON.stringify(['Интервью', 'Контент-анализ', 'Киноведение']),
+      photo: '',
+    },
+  ]
+  for (const m of teamMembers) {
+    const existing = await db.teamMember.findFirst({ where: { nameRu: m.nameRu } })
+    if (!existing) await db.teamMember.create({ data: m })
+  }
+
+  console.log(`Seeded: ${films.length} films, ${persons.length} persons, ${collections.length} collections, ${timelineEvents.length} timeline events, ${teamMembers.length} team members`)
   console.log('Admin:     admin@kazfilm.kz      / admin123')
   console.log('Moderator: moderator@kazfilm.kz  / mod123')
   console.log('User:      user@test.kz          / user123')
