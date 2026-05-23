@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   if (!filmSlug) return NextResponse.json([], { status: 400 })
   const comments = await db.comment.findMany({
     where: { filmSlug },
-    include: { user: { select: { name: true, email: true } } },
+    include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })
   return NextResponse.json(comments)
@@ -20,9 +20,11 @@ export async function POST(req: Request) {
   const { filmSlug, content } = await req.json()
   if (!filmSlug || !content?.trim())
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
+  if (content.length > 2000)
+    return NextResponse.json({ error: 'Comment too long (max 2000 chars)' }, { status: 400 })
   const comment = await db.comment.create({
-    data: { filmSlug, content, userId: session.user.id! },
-    include: { user: { select: { name: true, email: true } } },
+    data: { filmSlug, content: content.trim(), userId: session.user.id! },
+    include: { user: { select: { name: true } } },
   })
   return NextResponse.json(comment)
 }

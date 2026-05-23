@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PersonCard } from '@/components/persons/PersonCard'
@@ -58,7 +58,7 @@ export default function PersonsPage() {
 
   const tabs: Role[] = ['all', 'director', 'actor', 'cinematographer', 'writer', 'producer']
 
-  const filtered = persons.filter((p) => {
+  const filtered = useMemo(() => persons.filter((p) => {
     const matchRole = activeRole === 'all' || p.role === activeRole
     if (!matchRole) return false
     if (!search) return true
@@ -69,7 +69,7 @@ export default function PersonsPage() {
       (name.kk ?? '').toLowerCase().includes(q) ||
       (name.en ?? '').toLowerCase().includes(q)
     )
-  })
+  }), [persons, activeRole, search])
 
   return (
     <main className="min-h-screen bg-[rgb(var(--background))] pt-20">

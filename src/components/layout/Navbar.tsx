@@ -86,8 +86,8 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link href={`/${locale}/search`}>
-                <Button variant="ghost" size="icon">
+              <Link href={`/${locale}/search`} aria-label={locale === 'kk' ? 'Іздеу' : locale === 'en' ? 'Search' : 'Поиск'}>
+                <Button variant="ghost" size="icon" tabIndex={-1} aria-hidden="true">
                   <Search className="w-5 h-5" />
                 </Button>
               </Link>
@@ -153,6 +153,9 @@ export function Navbar() {
                 size="icon"
                 className="lg:hidden"
                 onClick={() => setMobileOpen(true)}
+                aria-label={locale === 'kk' ? 'Мәзірді ашу' : locale === 'en' ? 'Open menu' : 'Открыть меню'}
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-nav"
               >
                 <Menu className="w-5 h-5" />
               </Button>
@@ -162,7 +165,7 @@ export function Navbar() {
       </header>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-[rgb(var(--background))] lg:hidden flex flex-col">
+        <div id="mobile-nav" className="fixed inset-0 z-50 bg-[rgb(var(--background))] lg:hidden flex flex-col">
           <div className="flex items-center justify-between h-16 px-4 border-b border-[rgb(var(--border))]/20">
             <Link
               href={`/${locale}`}
@@ -172,7 +175,12 @@ export function Navbar() {
               <Film className="w-6 h-6 text-[rgb(var(--primary))]" />
               <span className="font-display font-bold text-lg text-[rgb(var(--foreground))]">TAMGA</span>
             </Link>
-            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(false)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileOpen(false)}
+              aria-label={locale === 'kk' ? 'Мәзірді жабу' : locale === 'en' ? 'Close menu' : 'Закрыть меню'}
+            >
               <X className="w-6 h-6" />
             </Button>
           </div>

@@ -128,8 +128,9 @@ export default function RegisterPage() {
           )}
 
           <div>
-            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.name}</label>
+            <label htmlFor="reg-name" className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.name}</label>
             <input
+              id="reg-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -140,8 +141,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.email}</label>
+            <label htmlFor="reg-email" className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.email}</label>
             <input
+              id="reg-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -152,8 +154,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.password}</label>
+            <label htmlFor="reg-password" className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.password}</label>
             <input
+              id="reg-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

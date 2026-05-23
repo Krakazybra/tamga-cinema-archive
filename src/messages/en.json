@@ -81,7 +81,15 @@
       "art-house": "Art House",
       "folk": "Folk",
       "war": "War",
-      "crime": "Crime"
+      "crime": "Crime",
+      "adventure": "Adventure",
+      "spy": "Spy",
+      "neo-noir": "Neo-noir",
+      "psychological": "Psychological",
+      "biography": "Biography",
+      "children": "Children",
+      "fantasy": "Fantasy",
+      "melodrama": "Melodrama"
     },
     "mediaTypes": {
       "film": "Feature Film",

@@ -102,8 +102,9 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.email}</label>
+            <label htmlFor="login-email" className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.email}</label>
             <input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -114,8 +115,9 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.password}</label>
+            <label htmlFor="login-password" className="block text-[rgb(var(--muted))] text-sm mb-2">{copy.password}</label>
             <input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

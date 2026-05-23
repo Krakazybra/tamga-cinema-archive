@@ -81,7 +81,15 @@
       "art-house": "Арт-хаус",
       "folk": "Халықтық",
       "war": "Соғыс",
-      "crime": "Қылмыстық"
+      "crime": "Қылмыстық",
+      "adventure": "Шытырман",
+      "spy": "Тыңшылар",
+      "neo-noir": "Нео-нуар",
+      "psychological": "Психологиялық",
+      "biography": "Өмірбаяндық",
+      "children": "Балалар",
+      "fantasy": "Фантастика",
+      "melodrama": "Мелодрама"
     },
     "mediaTypes": {
       "film": "Ойын кино",

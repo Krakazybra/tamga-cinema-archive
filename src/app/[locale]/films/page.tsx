@@ -16,7 +16,7 @@ import type { Film, LocalizedString } from '@/types'
 
 const ITEMS_PER_PAGE = 12
 
-const GENRE_SLUGS = ['drama', 'thriller', 'historical', 'comedy', 'documentary', 'animation', 'epic', 'romance', 'action', 'art-house', 'folk', 'war', 'crime'] as const
+const GENRE_SLUGS = ['drama', 'thriller', 'historical', 'comedy', 'documentary', 'animation', 'epic', 'romance', 'action', 'art-house', 'folk', 'war', 'crime', 'adventure', 'spy', 'neo-noir', 'psychological', 'biography', 'children', 'fantasy', 'melodrama'] as const
 const DECADES = ['1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s']
 
 function FilmsContent() {

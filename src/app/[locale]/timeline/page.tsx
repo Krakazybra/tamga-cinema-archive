@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -49,7 +49,7 @@ function TimelineCard({ event, locale, tTypes }: CardProps) {
       <div className="flex flex-col sm:flex-row">
         {event.image && (
           <div className="relative w-full sm:w-52 h-44 sm:h-auto shrink-0">
-            <Image src={event.image} alt="" fill className="object-cover" />
+            <Image src={event.image} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 208px" />
           </div>
         )}
         <div className="p-5 flex-1">
@@ -139,17 +139,17 @@ export default function TimelinePage() {
     }
   }, [getYearFromMouseX])
 
-  const filtered = timelineEvents
-    .filter((e) => e.year >= rangeFrom && e.year <= rangeTo)
-    .sort((a, b) => a.year - b.year)
-
-  const groupedByYear = filtered.reduce((acc, evt) => {
-    if (!acc[evt.year]) acc[evt.year] = []
-    acc[evt.year].push(evt)
-    return acc
-  }, {} as Record<number, TimelineEvent[]>)
-
-  const years = Object.keys(groupedByYear).map(Number).sort((a, b) => a - b)
+  const { filtered, groupedByYear, years } = useMemo(() => {
+    const f = timelineEvents
+      .filter((e) => e.year >= rangeFrom && e.year <= rangeTo)
+      .sort((a, b) => a.year - b.year)
+    const g = f.reduce((acc, evt) => {
+      if (!acc[evt.year]) acc[evt.year] = []
+      acc[evt.year].push(evt)
+      return acc
+    }, {} as Record<number, TimelineEvent[]>)
+    return { filtered: f, groupedByYear: g, years: Object.keys(g).map(Number).sort((a, b) => a - b) }
+  }, [timelineEvents, rangeFrom, rangeTo])
 
   const fromPct = yearToPct(rangeFrom)
   const toPct = yearToPct(rangeTo)

@@ -11,7 +11,6 @@ interface Comment {
   createdAt: string
   user: {
     name: string | null
-    email?: string | null
   }
 }
 
@@ -215,11 +214,11 @@ export function CommentsSection({ filmSlug, locale }: Props) {
         ) : (
           comments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
-              <Avatar name={comment.user.name || comment.user.email || 'U'} />
+              <Avatar name={comment.user.name || 'U'} />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-[rgb(var(--foreground))] text-sm">
-                    {comment.user.name || comment.user.email || 'User'}
+                    {comment.user.name || 'User'}
                   </span>
                   <span className="text-[rgb(var(--muted))] text-xs">{formatDate(comment.createdAt)}</span>
                   {(userRole === 'ADMIN' || userRole === 'MODERATOR') && (

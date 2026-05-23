@@ -46,64 +46,66 @@ export function FilmCard({ film, locale }: FilmCardProps) {
     : film.director.replace(/-/g, ' ')
 
   return (
-    <Link href={`/${locale}/films/${film.slug}`} className="group block">
-      <div className="relative overflow-hidden rounded-lg bg-[rgb(var(--surface))]">
-        <div className="aspect-[2/3] relative overflow-hidden">
-          <Image
-            src={film.poster}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1.5">
-              <div className="flex flex-wrap gap-1">
-                {film.genres.slice(0, 2).map((g) => (
-                  <span
-                    key={g}
-                    className="text-[10px] px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent))]/20 text-[rgb(var(--accent))] border border-[rgb(var(--accent))]/30"
-                  >
-                    {getGenreLabel(g, locale)}
-                  </span>
-                ))}
+    <div className="group relative">
+      <Link href={`/${locale}/films/${film.slug}`} className="block">
+        <div className="relative overflow-hidden rounded-lg bg-[rgb(var(--surface))]">
+          <div className="aspect-[2/3] relative overflow-hidden">
+            <Image
+              src={film.poster}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1.5">
+                <div className="flex flex-wrap gap-1">
+                  {film.genres.slice(0, 2).map((g) => (
+                    <span
+                      key={g}
+                      className="text-[10px] px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent))]/20 text-[rgb(var(--accent))] border border-[rgb(var(--accent))]/30"
+                    >
+                      {getGenreLabel(g, locale)}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-white/80 text-xs line-clamp-2">
+                  {(film.synopsis as Record<string, string>)[locale]?.slice(0, 80) ?? ''}…
+                </p>
               </div>
-              <p className="text-white/80 text-xs line-clamp-2">
-                {(film.synopsis as Record<string, string>)[locale]?.slice(0, 80) ?? ''}…
-              </p>
             </div>
           </div>
+
+          <span className="absolute top-2 left-2 text-xs bg-black/60 backdrop-blur-sm text-white/90 px-2 py-0.5 rounded-md font-medium">
+            {film.year}
+          </span>
         </div>
 
-        <span className="absolute top-2 left-2 text-xs bg-black/60 backdrop-blur-sm text-white/90 px-2 py-0.5 rounded-md font-medium">
-          {film.year}
-        </span>
-
-        <button
-          onClick={toggleLike}
-          className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
-          aria-label="Like"
-        >
-          <Heart className={`w-4 h-4 ${liked ? 'fill-red-500 text-red-500' : 'text-white'}`} />
-        </button>
-      </div>
-
-      <div className="mt-2 px-1">
-        <h3 className="font-semibold text-sm line-clamp-2 text-[rgb(var(--foreground))] group-hover:text-[rgb(var(--primary))] transition-colors">
-          {title}
-        </h3>
-        <p className="text-xs text-[rgb(var(--accent))] mt-0.5 line-clamp-1">
-          {film.genres.slice(0, 2).map((g) => getGenreLabel(g, locale)).join(' · ')}
-        </p>
-        <div className="flex items-center justify-between mt-0.5">
-          <p className="text-xs text-[rgb(var(--muted))] capitalize">{dirLabel}</p>
-          {likeCount > 0 && (
-            <span className="text-xs text-[rgb(var(--muted))] flex items-center gap-1">
-              <Heart className="w-3 h-3" /> {likeCount}
-            </span>
-          )}
+        <div className="mt-2 px-1">
+          <h3 className="font-semibold text-sm line-clamp-2 text-[rgb(var(--foreground))] group-hover:text-[rgb(var(--primary))] transition-colors">
+            {title}
+          </h3>
+          <p className="text-xs text-[rgb(var(--accent))] mt-0.5 line-clamp-1">
+            {film.genres.slice(0, 2).map((g) => getGenreLabel(g, locale)).join(' · ')}
+          </p>
+          <div className="flex items-center justify-between mt-0.5">
+            <p className="text-xs text-[rgb(var(--muted))] capitalize">{dirLabel}</p>
+            {likeCount > 0 && (
+              <span className="text-xs text-[rgb(var(--muted))] flex items-center gap-1">
+                <Heart className="w-3 h-3" /> {likeCount}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      <button
+        onClick={toggleLike}
+        className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+        aria-label={locale === 'kk' ? 'Ұнайды' : locale === 'en' ? 'Like' : 'Нравится'}
+      >
+        <Heart className={`w-4 h-4 ${liked ? 'fill-red-500 text-red-500' : 'text-white'}`} />
+      </button>
+    </div>
   )
 }

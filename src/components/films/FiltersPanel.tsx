@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 
 const DECADES = ['1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s']
-const GENRE_SLUGS = ['drama', 'thriller', 'historical', 'comedy', 'documentary', 'animation', 'epic', 'romance', 'action', 'art-house', 'folk', 'war', 'crime'] as const
+const GENRE_SLUGS = ['drama', 'thriller', 'historical', 'comedy', 'documentary', 'animation', 'epic', 'romance', 'action', 'art-house', 'folk', 'war', 'crime', 'adventure', 'spy', 'neo-noir', 'psychological', 'biography', 'children', 'fantasy', 'melodrama'] as const
 const MEDIA_TYPE_SLUGS = ['film', 'documentary', 'short', 'animation'] as const
 const LANGUAGE_SLUGS = ['kk', 'ru', 'mixed'] as const
 

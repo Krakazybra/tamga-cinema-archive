@@ -45,8 +45,14 @@ export default async function ProfilePage({ params, searchParams }: Props) {
     redirect(`/${loc}/auth/login`)
   }
 
+  const userRole = (session.user as { role?: string }).role
+  const canUpload = userRole === 'ADMIN' || userRole === 'MODERATOR'
+
   const activeTab = (tab as Tab) || 'favorites'
-  const tabs = tabConfig[loc] || tabConfig.ru
+  const allTabs = tabConfig[loc] || tabConfig.ru
+  const tabs = canUpload ? allTabs : Object.fromEntries(
+    Object.entries(allTabs).filter(([key]) => key !== 'upload')
+  ) as typeof allTabs
 
   const [userLikes, userComments] = await Promise.all([
     db.like.findMany({ where: { userId: session.user.id! }, orderBy: { createdAt: 'desc' }, take: 20 }),
