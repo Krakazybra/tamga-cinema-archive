@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { put } from '@vercel/blob'
 import { randomUUID } from 'crypto'
 
 const ALLOWED_TYPES = [
@@ -40,7 +39,7 @@ const MAX_SIZE = 50 * 1024 * 1024
 
 function checkMagicBytes(buffer: Buffer, mimeType: string): boolean {
   const signatures = MAGIC_BYTES[mimeType]
-  if (!signatures) return true // skip check for types without magic bytes map
+  if (!signatures) return true
   return signatures.some((sig) => sig.every((byte, i) => buffer[i] === byte))
 }
 
@@ -69,8 +68,11 @@ export async function POST(req: Request) {
 
   const ext = EXT_MAP[file.type] ?? ''
   const filename = `${randomUUID()}${ext}`
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-  await mkdir(uploadDir, { recursive: true })
-  await writeFile(path.join(uploadDir, filename), buffer)
-  return NextResponse.json({ url: `/uploads/${filename}`, name: file.name })
+
+  const blob = await put(filename, buffer, {
+    access: 'public',
+    contentType: file.type,
+  })
+
+  return NextResponse.json({ url: blob.url, name: file.name })
 }
