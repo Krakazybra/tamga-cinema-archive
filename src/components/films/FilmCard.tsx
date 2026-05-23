@@ -5,12 +5,16 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Heart } from 'lucide-react'
 import { toast } from 'sonner'
+import { persons } from '@/data/persons'
+import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
 
 interface FilmCardProps {
   film: Film
   locale: string
 }
+
+const personMap = new Map(persons.map((p) => [p.slug, p.name]))
 
 export function FilmCard({ film, locale }: FilmCardProps) {
   const { data: session } = useSession()
@@ -36,6 +40,10 @@ export function FilmCard({ film, locale }: FilmCardProps) {
   }
 
   const title = (film.title as Record<string, string>)[locale] ?? film.title.ru
+  const dirName = personMap.get(film.director)
+  const dirLabel = dirName
+    ? (dirName as Record<string, string>)[locale] ?? dirName.ru
+    : film.director.replace(/-/g, ' ')
 
   return (
     <Link href={`/${locale}/films/${film.slug}`} className="group block">
@@ -56,7 +64,7 @@ export function FilmCard({ film, locale }: FilmCardProps) {
                     key={g}
                     className="text-[10px] px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent))]/20 text-[rgb(var(--accent))] border border-[rgb(var(--accent))]/30"
                   >
-                    {g}
+                    {getGenreLabel(g, locale)}
                   </span>
                 ))}
               </div>
@@ -76,9 +84,7 @@ export function FilmCard({ film, locale }: FilmCardProps) {
           className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
           aria-label="Like"
         >
-          <Heart
-            className={`w-4 h-4 ${liked ? 'fill-red-500 text-red-500' : 'text-white'}`}
-          />
+          <Heart className={`w-4 h-4 ${liked ? 'fill-red-500 text-red-500' : 'text-white'}`} />
         </button>
       </div>
 
@@ -87,10 +93,10 @@ export function FilmCard({ film, locale }: FilmCardProps) {
           {title}
         </h3>
         <p className="text-xs text-[rgb(var(--accent))] mt-0.5 line-clamp-1">
-          {film.genres.slice(0, 2).join(' · ')}
+          {film.genres.slice(0, 2).map((g) => getGenreLabel(g, locale)).join(' · ')}
         </p>
         <div className="flex items-center justify-between mt-0.5">
-          <p className="text-xs text-[rgb(var(--muted))] capitalize">{film.director.replace(/-/g, ' ')}</p>
+          <p className="text-xs text-[rgb(var(--muted))] capitalize">{dirLabel}</p>
           {likeCount > 0 && (
             <span className="text-xs text-[rgb(var(--muted))] flex items-center gap-1">
               <Heart className="w-3 h-3" /> {likeCount}

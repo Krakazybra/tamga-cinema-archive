@@ -35,7 +35,7 @@ export default async function PersonDetailPage({ params }: Props) {
   )
 
   const roleLabel: Record<string, Record<string, string>> = {
-    kk: { director: 'Режиссер', actor: 'Актер', cinematographer: 'Оператор', writer: 'Сценарист', producer: 'Продюсер' },
+    kk: { director: 'Режиссер', actor: 'Актер', cinematographer: 'Оператор-қоюшы', writer: 'Сценарист', producer: 'Продюсер' },
     ru: { director: 'Режиссёр', actor: 'Актёр', cinematographer: 'Оператор', writer: 'Сценарист', producer: 'Продюсер' },
     en: { director: 'Director', actor: 'Actor', cinematographer: 'Cinematographer', writer: 'Screenwriter', producer: 'Producer' },
   }

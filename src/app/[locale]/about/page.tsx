@@ -86,7 +86,7 @@ const experts = [
   {
     category: { kk: 'МҰРАҒАТ / КИНОТАНУ', ru: 'АРХИВ / КИНОВЕДЕНИЕ', en: 'ARCHIVE / FILM STUDIES' },
     name: 'Евгений Лумпов',
-    position: { kk: 'Должность, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
+    position: { kk: 'Лауазымы, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
     quote: {
       ru: 'Всё, что в открытом доступе — это уже каталог. Архив — это то, что доступно только через закрытую систему. Буквально заархивировано.',
       kk: 'Ашық қолжетімдіде бар нәрсенің бәрі каталог. Мұрағат — тек жабық жүйе арқылы қолжетімді нәрсе. Сөзбе-сөз мұрағатталған.',
@@ -96,7 +96,7 @@ const experts = [
   {
     category: { kk: 'КИНОПРОДУКЦИЯ', ru: 'КИНОПРОИЗВОДСТВО', en: 'FILM PRODUCTION' },
     name: { kk: 'Эксперт есімі', ru: 'Имя эксперта', en: 'Expert Name' },
-    position: { kk: 'Должность, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
+    position: { kk: 'Лауазымы, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
     quote: {
       ru: 'Ещё одна значимая цитата — про доступность, сохранение или важность цифрового архива для культуры.',
       kk: 'Тағы бір маңызды цитата — мәдениет үшін цифрлық мұрағаттың қолжетімділігі, сақтауы немесе маңыздылығы туралы.',
@@ -106,7 +106,7 @@ const experts = [
   {
     category: { kk: 'КИНОБІЛІМ', ru: 'КИНООБРАЗОВАНИЕ', en: 'FILM EDUCATION' },
     name: { kk: 'Эксперт есімі', ru: 'Имя эксперта', en: 'Expert Name' },
-    position: { kk: 'Должность, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
+    position: { kk: 'Лауазымы, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
     quote: {
       ru: 'Цитата о том, как студенты и исследователи сталкиваются с проблемой поиска информации о казахском кино.',
       kk: 'Студенттер мен зерттеушілердің қазақ кино туралы ақпарат іздеу мәселесіне тап болатындығы туралы цитата.',
@@ -116,7 +116,7 @@ const experts = [
   {
     category: { kk: 'ХАЛЫҚАРАЛЫҚ ТӘЖІРИБЕ', ru: 'МЕЖДУНАРОДНЫЙ ОПЫТ', en: 'INTERNATIONAL EXPERIENCE' },
     name: { kk: 'Эксперт есімі', ru: 'Имя эксперта', en: 'Expert Name' },
-    position: { kk: 'Должность, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
+    position: { kk: 'Лауазымы, Ұйым', ru: 'Должность, Организация', en: 'Position, Organisation' },
     quote: {
       ru: 'Цитата о международном контексте — как другие страны решали задачу оцифровки и сохранения кинонаследия.',
       kk: 'Халықаралық контекст туралы цитата — басқа елдер кинемұраны цифрландыру мен сақтау міндетін қалай шешті.',
@@ -173,7 +173,7 @@ const pageCopy = {
     missionLabel: 'МИССИЯ',
     missionQuote: '«Қазақстанда түсірілді. Кездейсоқ ұмытылды. Арнайы сақталды.»',
     missionAttr: '— TAMGA командасы, 2026',
-    teamLabel: 'КОМАНДА',
+    teamLabel: 'ТОП',
     teamTitle: 'Жоба авторлары',
     teamSub: 'Бір идеямен біріккен үш адам.',
     historyLabel: 'ҚҰРУ ТАРИХЫ',
@@ -286,7 +286,7 @@ export default async function AboutPage({ params }: Props) {
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[rgb(var(--border))]/20 bg-[rgb(var(--card))] text-[rgb(var(--muted))] text-xs mb-8">
                 <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent))]" />
-                {l === 'kk' ? 'Жоба туралы · Команда · Миссия' : l === 'en' ? 'About · Team · Mission' : 'О проекте · Команда · Миссия'}
+                {l === 'kk' ? 'Жоба туралы · Топ · Миссия' : l === 'en' ? 'About · Team · Mission' : 'О проекте · Команда · Миссия'}
               </div>
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-display font-bold leading-[1.05] mb-6">
                 <span className="text-[rgb(var(--foreground))]">{t.heroTitle1}</span>
