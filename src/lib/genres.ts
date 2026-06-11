@@ -19,9 +19,19 @@ export const GENRE_LABELS: Record<string, { kk: string; ru: string; en: string }
   fantasy:       { kk: 'Фантастика',    ru: 'Фэнтези',         en: 'Fantasy' },
   melodrama:     { kk: 'Мелодрама',     ru: 'Мелодрама',       en: 'Melodrama' },
   crime:         { kk: 'Криминал',      ru: 'Криминал',        en: 'Crime' },
+  documentary:   { kk: 'Деректі',       ru: 'Документальный',  en: 'Documentary' },
+  short:         { kk: 'Қысқа метр',    ru: 'Короткометражка', en: 'Short' },
+  musical:       { kk: 'Мюзикл',        ru: 'Мюзикл',          en: 'Musical' },
+  'sci-fi':      { kk: 'Фантастика',    ru: 'Фантастика',      en: 'Sci-Fi' },
+  mystery:       { kk: 'Жұмбақ',        ru: 'Детектив',        en: 'Mystery' },
+  horror:        { kk: 'Қорқынышты',    ru: 'Ужасы',           en: 'Horror' },
+  family:        { kk: 'Отбасылық',     ru: 'Семейный',        en: 'Family' },
+  sport:         { kk: 'Спорт',         ru: 'Спортивный',      en: 'Sport' },
 }
 
 export function getGenreLabel(slug: string, locale: string): string {
   const loc = locale as 'kk' | 'ru' | 'en'
-  return GENRE_LABELS[slug]?.[loc] ?? slug
+  // Normalize: lowercase + trim so admin-entered "Documentary" / " Drama " still match
+  const key = slug.trim().toLowerCase()
+  return GENRE_LABELS[key]?.[loc] ?? slug
 }
