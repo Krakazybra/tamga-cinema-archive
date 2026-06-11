@@ -108,36 +108,36 @@ export default function TimelinePage() {
     return Math.round(MIN_YEAR + (pct / 100) * SPAN)
   }, [])
 
-  // Single effect attached once — reads from refs, never stale
-  useEffect(() => {
-    const onMove = (clientX: number) => {
-      if (!draggingRef.current) return
-      const year = getYearFromMouseX(clientX)
-      if (draggingRef.current === 'left') {
-        const newFrom = Math.min(year, rangeToRef.current - 1)
-        rangeFromRef.current = newFrom
-        setRangeFrom(newFrom)
-      } else {
-        const newTo = Math.max(year, rangeFromRef.current + 1)
-        rangeToRef.current = newTo
-        setRangeTo(newTo)
-      }
-    }
-    const onMouseMove = (e: MouseEvent) => onMove(e.clientX)
-    const onTouchMove = (e: TouchEvent) => { if (e.touches[0]) onMove(e.touches[0].clientX) }
-    const onUp = () => { draggingRef.current = null; setDragging(null) }
+  // Pointer events + setPointerCapture: works identically for mouse and
+  // touch, and keeps receiving moves even when the pointer leaves the handle.
+  const handlePointerDown = (side: 'left' | 'right') => (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.currentTarget.setPointerCapture(e.pointerId)
+    draggingRef.current = side
+    setDragging(side)
+  }
 
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseup', onUp)
-    window.addEventListener('touchmove', onTouchMove, { passive: true })
-    window.addEventListener('touchend', onUp)
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseup', onUp)
-      window.removeEventListener('touchmove', onTouchMove)
-      window.removeEventListener('touchend', onUp)
+  const handlePointerMove = (side: 'left' | 'right') => (e: React.PointerEvent<HTMLDivElement>) => {
+    if (draggingRef.current !== side) return
+    const year = getYearFromMouseX(e.clientX)
+    if (side === 'left') {
+      const newFrom = Math.min(year, rangeToRef.current - 1)
+      rangeFromRef.current = newFrom
+      setRangeFrom(newFrom)
+    } else {
+      const newTo = Math.max(year, rangeFromRef.current + 1)
+      rangeToRef.current = newTo
+      setRangeTo(newTo)
     }
-  }, [getYearFromMouseX])
+  }
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    }
+    draggingRef.current = null
+    setDragging(null)
+  }
 
   const { filtered, groupedByYear, years } = useMemo(() => {
     const f = timelineEvents
@@ -235,16 +235,20 @@ export default function TimelinePage() {
             <div
               className={`absolute top-1/2 w-5 h-5 rounded-full bg-[rgb(var(--accent))] border-2 border-white -translate-x-1/2 -translate-y-1/2 cursor-ew-resize shadow-md z-10 hover:scale-110 transition-transform ${dragging === 'left' ? 'scale-125' : ''}`}
               style={{ left: `${fromPct}%`, touchAction: 'none' }}
-              onMouseDown={(e) => { e.preventDefault(); draggingRef.current = 'left'; setDragging('left') }}
-              onTouchStart={(e) => { e.preventDefault(); draggingRef.current = 'left'; setDragging('left') }}
+              onPointerDown={handlePointerDown('left')}
+              onPointerMove={handlePointerMove('left')}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
             />
 
             {/* Right handle */}
             <div
               className={`absolute top-1/2 w-5 h-5 rounded-full bg-[rgb(var(--accent))] border-2 border-white -translate-x-1/2 -translate-y-1/2 cursor-ew-resize shadow-md z-20 hover:scale-110 transition-transform ${dragging === 'right' ? 'scale-125' : ''}`}
               style={{ left: `${toPct}%`, touchAction: 'none' }}
-              onMouseDown={(e) => { e.preventDefault(); draggingRef.current = 'right'; setDragging('right') }}
-              onTouchStart={(e) => { e.preventDefault(); draggingRef.current = 'right'; setDragging('right') }}
+              onPointerDown={handlePointerDown('right')}
+              onPointerMove={handlePointerMove('right')}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
             />
           </div>
 
