@@ -57,6 +57,8 @@ model Film {
   year                Int
   decade              String
   genres              String   @default("[]")
+  genresRu            String   @default("[]")
+  genresKk            String   @default("[]")
   tags                String   @default("[]")
   synopsisKk          String   @default("")
   synopsisRu          String   @default("")

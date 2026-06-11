@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbTimelineEventToTimelineEvent } from '@/lib/content'
+import { dbTimelineEventToTimelineEventAdmin } from '@/lib/content'
 import { requireAdmin, safeInt } from '@/lib/admin-auth'
 
 type Ctx = { params: Promise<{ id: string }> }
@@ -10,9 +10,9 @@ export async function GET(_req: Request, { params }: Ctx) {
   if ('error' in check) return check.error
   const { id } = await params
   try {
-    const evt = await db.timelineEvent.findUnique({ where: { id } })
+    const evt = await db.timelineEvent.findUnique({ where: { slug: id } })
     if (!evt) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(dbTimelineEventToTimelineEvent(evt))
+    return NextResponse.json(dbTimelineEventToTimelineEventAdmin(evt))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -33,7 +33,7 @@ export async function PUT(req: Request, { params }: Ctx) {
 
   try {
     const evt = await db.timelineEvent.update({
-      where: { id },
+      where: { slug: id },
       data: {
         slug: slug || undefined,
         year: safeInt(body.year),
@@ -49,7 +49,7 @@ export async function PUT(req: Request, { params }: Ctx) {
         era: String(body.era ?? ''),
       },
     })
-    return NextResponse.json(dbTimelineEventToTimelineEvent(evt))
+    return NextResponse.json(dbTimelineEventToTimelineEventAdmin(evt))
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Record to update not found')) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -63,7 +63,7 @@ export async function DELETE(_req: Request, { params }: Ctx) {
   if ('error' in check) return check.error
   const { id } = await params
   try {
-    await db.timelineEvent.delete({ where: { id } })
+    await db.timelineEvent.delete({ where: { slug: id } })
     return NextResponse.json({ ok: true })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'

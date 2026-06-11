@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbFilmToFilm } from '@/lib/content'
+import { dbFilmToFilmAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray, safeInt } from '@/lib/admin-auth'
 
 export async function GET() {
@@ -9,7 +9,7 @@ export async function GET() {
 
   try {
     const films = await db.film.findMany({ orderBy: { year: 'desc' } })
-    return NextResponse.json(films.map(dbFilmToFilm))
+    return NextResponse.json(films.map(dbFilmToFilmAdmin))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -37,6 +37,8 @@ export async function POST(req: Request) {
         year: safeInt(body.year),
         decade: String(body.decade || `${Math.floor(safeInt(body.year) / 10) * 10}s`),
         genres: JSON.stringify(ensureArray(body.genres)),
+        genresRu: JSON.stringify(ensureArray(body.genresRu ?? [])),
+        genresKk: JSON.stringify(ensureArray(body.genresKk ?? [])),
         tags: JSON.stringify(ensureArray(body.tags)),
         synopsisKk: String((body.synopsis as Record<string,string>)?.kk ?? ''),
         synopsisRu: String((body.synopsis as Record<string,string>)?.ru ?? ''),
@@ -62,7 +64,7 @@ export async function POST(req: Request) {
         videoUrl: body.videoUrl ? String(body.videoUrl) : null,
       },
     })
-    return NextResponse.json(dbFilmToFilm(film), { status: 201 })
+    return NextResponse.json(dbFilmToFilmAdmin(film), { status: 201 })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Unique constraint')) return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })

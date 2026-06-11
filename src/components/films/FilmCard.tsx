@@ -5,18 +5,22 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Heart } from 'lucide-react'
 import { toast } from 'sonner'
-import { persons } from '@/data/persons'
 import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
 
 interface FilmCardProps {
   film: Film
   locale: string
+  personNames?: Record<string, { kk: string; ru: string; en: string }>
 }
 
-const personMap = new Map(persons.map((p) => [p.slug, p.name]))
+function getLocalizedGenres(film: Film, locale: string): string[] {
+  if (locale === 'kk' && film.genresKk?.length) return film.genresKk
+  if (locale === 'ru' && film.genresRu?.length) return film.genresRu
+  return film.genres.map(g => getGenreLabel(g, locale))
+}
 
-export function FilmCard({ film, locale }: FilmCardProps) {
+export function FilmCard({ film, locale, personNames }: FilmCardProps) {
   const { data: session } = useSession()
   const [liked, setLiked] = useState(false)
   const [likeCount, setLikeCount] = useState(0)
@@ -40,10 +44,12 @@ export function FilmCard({ film, locale }: FilmCardProps) {
   }
 
   const title = (film.title as Record<string, string>)[locale] ?? film.title.ru
-  const dirName = personMap.get(film.director)
+  const dirName = personNames?.[film.director]
   const dirLabel = dirName
-    ? (dirName as Record<string, string>)[locale] ?? dirName.ru
+    ? ((dirName as Record<string, string>)[locale] || dirName.ru || dirName.en || film.director.replace(/-/g, ' '))
     : film.director.replace(/-/g, ' ')
+
+  const displayGenres = getLocalizedGenres(film, locale)
 
   return (
     <div className="group relative">
@@ -62,12 +68,12 @@ export function FilmCard({ film, locale }: FilmCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
               <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1.5">
                 <div className="flex flex-wrap gap-1">
-                  {film.genres.slice(0, 2).map((g) => (
+                  {displayGenres.slice(0, 2).map((g) => (
                     <span
                       key={g}
                       className="text-[10px] px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent))]/20 text-[rgb(var(--accent))] border border-[rgb(var(--accent))]/30"
                     >
-                      {getGenreLabel(g, locale)}
+                      {g}
                     </span>
                   ))}
                 </div>
@@ -88,7 +94,7 @@ export function FilmCard({ film, locale }: FilmCardProps) {
             {title}
           </h3>
           <p className="text-xs text-[rgb(var(--accent))] mt-0.5 line-clamp-1">
-            {film.genres.slice(0, 2).map((g) => getGenreLabel(g, locale)).join(' · ')}
+            {displayGenres.slice(0, 2).join(' · ')}
           </p>
           <div className="flex items-center justify-between mt-0.5">
             <p className="text-xs text-[rgb(var(--muted))] capitalize">{dirLabel}</p>

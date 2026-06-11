@@ -143,7 +143,7 @@ function emptyFilm(): Partial<FilmType> {
     slug: '', year: new Date().getFullYear(), decade: '2020s',
     title: { kk: '', ru: '', en: '' }, synopsis: { kk: '', ru: '', en: '' },
     studio: { kk: '', ru: '', en: '' },
-    genres: [], tags: [], cast: [], gallery: [], collections: [], relatedFilms: [],
+    genres: [], genresRu: [], genresKk: [], tags: [], cast: [], gallery: [], collections: [], relatedFilms: [],
     poster: '', banner: '', director: '', cinematographer: '', screenwriter: '',
     duration: 0, language: 'ru', mediaType: 'film', archiveId: '',
     featured: false, historicalRelevance: 5, videoUrl: '',
@@ -235,8 +235,12 @@ function FilmForm({ initial, onSave, onClose, saving, persons }: FilmFormProps) 
       </fieldset>
 
       <div>
-        <label className="block text-[rgb(var(--muted))] mb-1">Жанры</label>
-        <TagInput value={d.genres ?? []} onChange={(v) => set('genres', v)} placeholder="drama, thriller..." />
+        <label className="block text-[rgb(var(--muted))] mb-1">Жанры EN (слаги для фильтра)</label>
+        <TagInput value={d.genres ?? []} onChange={(v) => set('genres', v)} placeholder="drama, thriller, documentary..." />
+        <label className="block text-[rgb(var(--muted))] mb-1 mt-2">Жанры RU</label>
+        <TagInput value={d.genresRu ?? []} onChange={(v) => set('genresRu', v)} placeholder="Драма, Триллер, Документальный..." />
+        <label className="block text-[rgb(var(--muted))] mb-1 mt-2">Жанры KK</label>
+        <TagInput value={d.genresKk ?? []} onChange={(v) => set('genresKk', v)} placeholder="Драма, Триллер, Деректі..." />
       </div>
       <div>
         <label className="block text-[rgb(var(--muted))] mb-1">Теги</label>

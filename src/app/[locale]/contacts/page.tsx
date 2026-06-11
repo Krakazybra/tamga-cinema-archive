@@ -15,13 +15,6 @@ const copy = {
       { label: 'Серіктестік', value: 'partner@tamga.kz', icon: '🤝', hint: 'Ынтымақтастық ұсыныстары' },
       { label: 'Телефон', value: '+7 (727) 000-00-00', icon: '📞', hint: 'Дүйсенбі–Жұма, 9–18' },
     ],
-    socialsTitle: 'Әлеуметтік желілер',
-    socials: [
-      { name: 'YouTube', href: 'https://www.youtube.com/@kazfilm' },
-      { name: 'Instagram', href: 'https://www.instagram.com/kazfilm.kz' },
-      { name: 'Telegram', href: 'https://t.me/tamga_kz' },
-      { name: 'LinkedIn', href: 'https://linkedin.com/company/tamga' },
-    ],
     infoStrip: [
       { icon: '⏱', label: '24 сағат', sub: 'жауап беру уақыты' },
       { icon: '🌍', label: 'ҚЗ', sub: 'Алматы қаласы' },
@@ -65,13 +58,6 @@ const copy = {
       { label: 'Партнёрство', value: 'partner@tamga.kz', icon: '🤝', hint: 'Предложения о сотрудничестве' },
       { label: 'Телефон', value: '+7 (727) 000-00-00', icon: '📞', hint: 'Пн–Пт, 9:00–18:00' },
     ],
-    socialsTitle: 'Социальные сети',
-    socials: [
-      { name: 'YouTube', href: 'https://www.youtube.com/@kazfilm' },
-      { name: 'Instagram', href: 'https://www.instagram.com/kazfilm.kz' },
-      { name: 'Telegram', href: 'https://t.me/tamga_kz' },
-      { name: 'LinkedIn', href: 'https://linkedin.com/company/tamga' },
-    ],
     infoStrip: [
       { icon: '⏱', label: '24 часа', sub: 'время ответа' },
       { icon: '🌍', label: 'КЗ', sub: 'г. Алматы' },
@@ -114,13 +100,6 @@ const copy = {
       { label: 'Research', value: 'research@tamga.kz', icon: '📚', hint: 'Academic requests' },
       { label: 'Partnership', value: 'partner@tamga.kz', icon: '🤝', hint: 'Collaboration proposals' },
       { label: 'Phone', value: '+7 (727) 000-00-00', icon: '📞', hint: 'Mon–Fri, 9:00–18:00' },
-    ],
-    socialsTitle: 'Social Media',
-    socials: [
-      { name: 'YouTube', href: 'https://www.youtube.com/@kazfilm' },
-      { name: 'Instagram', href: 'https://www.instagram.com/kazfilm.kz' },
-      { name: 'Telegram', href: 'https://t.me/tamga_kz' },
-      { name: 'LinkedIn', href: 'https://linkedin.com/company/tamga' },
     ],
     infoStrip: [
       { icon: '⏱', label: '24h', sub: 'response time' },
@@ -204,24 +183,6 @@ export default function ContactsPage() {
                   <p className="text-[rgb(var(--muted))] text-xs">{card.hint}</p>
                 </div>
               ))}
-            </div>
-
-            {/* Socials */}
-            <div className="p-5 rounded-2xl bg-[rgb(var(--card))] border border-[rgb(var(--border))]/15 mb-4">
-              <p className="text-xs uppercase tracking-widest text-[rgb(var(--accent))] font-medium mb-4">{t.socialsTitle}</p>
-              <div className="flex flex-wrap gap-3">
-                {t.socials.map((s) => (
-                  <a
-                    key={s.name}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-lg border border-[rgb(var(--border))]/20 text-[rgb(var(--muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))]/40 transition-colors text-sm font-medium"
-                  >
-                    {s.name}
-                  </a>
-                ))}
-              </div>
             </div>
 
             {/* Info strip */}

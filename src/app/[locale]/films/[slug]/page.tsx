@@ -5,8 +5,6 @@ import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
 import { ShareButton } from '@/components/shared/ShareButton'
 import { CommentsSection } from '@/components/comments/CommentsSection'
-import { films as staticFilms } from '@/data/films'
-import { persons as staticPersons } from '@/data/persons'
 import { db } from '@/lib/db'
 import { dbFilmToFilm, dbPersonToPerson } from '@/lib/content'
 import { getGenreLabel } from '@/lib/genres'
@@ -18,8 +16,8 @@ interface Props {
 
 async function getFilm(slug: string): Promise<Film | null> {
   const dbFilm = await db.film.findUnique({ where: { slug } }).catch(() => null)
-  if (dbFilm) return dbFilmToFilm(dbFilm)
-  return staticFilms.find((f) => f.slug === slug) ?? null
+  if (!dbFilm) return null
+  return dbFilmToFilm(dbFilm)
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -47,16 +45,13 @@ export default async function FilmDetailPage({ params }: Props) {
   const dbRelated = relatedSlugs.length > 0
     ? await db.film.findMany({ where: { slug: { in: relatedSlugs } } }).catch(() => [])
     : []
-  const relatedFilms = dbRelated.length > 0
-    ? dbRelated.map(dbFilmToFilm)
-    : staticFilms.filter((f) => relatedSlugs.includes(f.slug))
+  const relatedFilms = dbRelated.map(dbFilmToFilm)
 
   const crewSlugs = [film.director, film.cinematographer, film.screenwriter, ...film.cast].filter(Boolean)
   const dbPersons = crewSlugs.length > 0
     ? await db.person.findMany({ where: { slug: { in: crewSlugs } } }).catch(() => [])
     : []
-  const personSource = dbPersons.length > 0 ? dbPersons.map(dbPersonToPerson) : staticPersons
-  const personMap = new Map(personSource.map((p) => [p.slug, p]))
+  const personMap = new Map(dbPersons.map(dbPersonToPerson).map((p) => [p.slug, p]))
 
   const labels = {
     kk: {
@@ -140,9 +135,9 @@ export default async function FilmDetailPage({ params }: Props) {
           </div>
           <div className="space-y-3 flex-1">
             <div className="flex flex-wrap gap-2">
-              {film.genres.slice(0, 3).map((g) => (
+              {(loc === 'kk' && film.genresKk?.length ? film.genresKk : loc === 'ru' && film.genresRu?.length ? film.genresRu : film.genres.map(g => getGenreLabel(g, loc))).slice(0, 3).map((g) => (
                 <span key={g} className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium border border-amber-500/30">
-                  {getGenreLabel(g, loc)}
+                  {g}
                 </span>
               ))}
             </div>
@@ -230,7 +225,9 @@ export default async function FilmDetailPage({ params }: Props) {
               { role: t.screenwriter, slug: film.screenwriter },
             ].map(({ role, slug }) => {
               const person = personMap.get(slug)
-              const displayName = person ? person.name[loc] : slug.replace(/-/g, ' ')
+              const displayName = person
+                ? (person.name[loc] || person.name.ru || person.name.en || slug.replace(/-/g, ' '))
+                : slug.replace(/-/g, ' ')
               return (
                 <div key={role} className="p-5 rounded-xl bg-[rgb(var(--card))] border border-[rgb(var(--border))]">
                   <p className="text-[rgb(var(--muted))] text-xs uppercase tracking-wider mb-2">{role}</p>
@@ -276,7 +273,7 @@ export default async function FilmDetailPage({ params }: Props) {
           <AnimatedSection>
             <h2 className="text-2xl font-bold text-[rgb(var(--foreground))] mb-6">{t.gallery}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {film.gallery.map((src, i) => (
+              {film.gallery.filter(Boolean).map((src, i) => (
                 <div key={i} className="relative aspect-video rounded-xl overflow-hidden">
                   <Image src={src} alt={`${film.title[loc]} — ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" />
                 </div>

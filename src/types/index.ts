@@ -13,6 +13,8 @@ export interface Film {
   year: number
   decade: string
   genres: string[]
+  genresRu?: string[]
+  genresKk?: string[]
   tags: string[]
   synopsis: LocalizedString
   poster: string

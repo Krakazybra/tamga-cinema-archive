@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbFilmToFilm } from '@/lib/content'
+import { dbFilmToFilmAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray, safeInt } from '@/lib/admin-auth'
 
 type Ctx = { params: Promise<{ id: string }> }
@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   try {
     const film = await db.film.findUnique({ where: { id } })
     if (!film) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(dbFilmToFilm(film))
+    return NextResponse.json(dbFilmToFilmAdmin(film))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -41,6 +41,8 @@ export async function PUT(req: Request, { params }: Ctx) {
         year: safeInt(body.year),
         decade: String(body.decade || `${Math.floor(safeInt(body.year) / 10) * 10}s`),
         genres: JSON.stringify(ensureArray(body.genres)),
+        genresRu: JSON.stringify(ensureArray(body.genresRu ?? [])),
+        genresKk: JSON.stringify(ensureArray(body.genresKk ?? [])),
         tags: JSON.stringify(ensureArray(body.tags)),
         synopsisKk: String((body.synopsis as Record<string,string>)?.kk ?? ''),
         synopsisRu: String((body.synopsis as Record<string,string>)?.ru ?? ''),
@@ -66,7 +68,7 @@ export async function PUT(req: Request, { params }: Ctx) {
         videoUrl: body.videoUrl ? String(body.videoUrl) : null,
       },
     })
-    return NextResponse.json(dbFilmToFilm(film))
+    return NextResponse.json(dbFilmToFilmAdmin(film))
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Record to update not found')) return NextResponse.json({ error: 'Not found' }, { status: 404 })

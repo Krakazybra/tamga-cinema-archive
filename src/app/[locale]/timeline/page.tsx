@@ -234,15 +234,15 @@ export default function TimelinePage() {
             {/* Left handle */}
             <div
               className={`absolute top-1/2 w-5 h-5 rounded-full bg-[rgb(var(--accent))] border-2 border-white -translate-x-1/2 -translate-y-1/2 cursor-ew-resize shadow-md z-10 hover:scale-110 transition-transform ${dragging === 'left' ? 'scale-125' : ''}`}
-              style={{ left: `${fromPct}%` }}
+              style={{ left: `${fromPct}%`, touchAction: 'none' }}
               onMouseDown={(e) => { e.preventDefault(); draggingRef.current = 'left'; setDragging('left') }}
               onTouchStart={(e) => { e.preventDefault(); draggingRef.current = 'left'; setDragging('left') }}
             />
 
             {/* Right handle */}
             <div
-              className={`absolute top-1/2 w-5 h-5 rounded-full bg-[rgb(var(--accent))] border-2 border-white -translate-x-1/2 -translate-y-1/2 cursor-ew-resize shadow-md z-10 hover:scale-110 transition-transform ${dragging === 'right' ? 'scale-125' : ''}`}
-              style={{ left: `${toPct}%` }}
+              className={`absolute top-1/2 w-5 h-5 rounded-full bg-[rgb(var(--accent))] border-2 border-white -translate-x-1/2 -translate-y-1/2 cursor-ew-resize shadow-md z-20 hover:scale-110 transition-transform ${dragging === 'right' ? 'scale-125' : ''}`}
+              style={{ left: `${toPct}%`, touchAction: 'none' }}
               onMouseDown={(e) => { e.preventDefault(); draggingRef.current = 'right'; setDragging('right') }}
               onTouchStart={(e) => { e.preventDefault(); draggingRef.current = 'right'; setDragging('right') }}
             />
