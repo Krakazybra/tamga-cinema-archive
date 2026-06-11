@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma db push && npx prisma db seed && next build",
+    "build": "prisma generate && prisma db push && next build",
+    "seed": "npx prisma db seed",
     "start": "next start",
     "serve": "AUTH_TRUST_HOST=true PORT=3000 node .next/standalone/server.js",
     "lint": "eslint"
