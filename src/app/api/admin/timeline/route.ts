@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbTimelineEventToTimelineEventAdminAdmin } from '@/lib/content'
+import { dbTimelineEventToTimelineEventAdmin } from '@/lib/content'
 import { requireAdmin, safeInt } from '@/lib/admin-auth'
 
 export async function GET() {
