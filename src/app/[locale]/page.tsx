@@ -30,7 +30,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const byEra = [
     {
-      label: { kk: 'Алтын дәуір · 1960–1979', ru: 'Золотой век · 1960–1979', en: 'Golden Age · 1960–1979' },
+      label: { kk: 'Кеңес дәуіріндегі қазақ киносы', ru: 'Казахстанское кино в советский период', en: 'Kazakh cinema in the Soviet period' },
       films: films.filter((f) => f.year >= 1960 && f.year < 1980),
     },
     {
