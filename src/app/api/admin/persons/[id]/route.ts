@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbPersonToPerson } from '@/lib/content'
+import { dbPersonToPersonAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray, safeInt } from '@/lib/admin-auth'
 
 type Ctx = { params: Promise<{ id: string }> }
@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   try {
     const person = await db.person.findUnique({ where: { id } })
     if (!person) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(dbPersonToPerson(person))
+    return NextResponse.json(dbPersonToPersonAdmin(person))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -49,7 +49,7 @@ export async function PUT(req: Request, { params }: Ctx) {
         featured: Boolean(body.featured),
       },
     })
-    return NextResponse.json(dbPersonToPerson(person))
+    return NextResponse.json(dbPersonToPersonAdmin(person))
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Record to update not found')) return NextResponse.json({ error: 'Not found' }, { status: 404 })

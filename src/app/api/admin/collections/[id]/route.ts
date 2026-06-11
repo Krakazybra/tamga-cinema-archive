@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbCollectionToCollection } from '@/lib/content'
+import { dbCollectionToCollectionAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray } from '@/lib/admin-auth'
 
 type Ctx = { params: Promise<{ id: string }> }
@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   try {
     const col = await db.collection.findUnique({ where: { id } })
     if (!col) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(dbCollectionToCollection(col))
+    return NextResponse.json(dbCollectionToCollectionAdmin(col))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -49,7 +49,7 @@ export async function PUT(req: Request, { params }: Ctx) {
         era: String(body.era ?? ''),
       },
     })
-    return NextResponse.json(dbCollectionToCollection(col))
+    return NextResponse.json(dbCollectionToCollectionAdmin(col))
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Record to update not found')) return NextResponse.json({ error: 'Not found' }, { status: 404 })

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
-import { films } from '@/data/films'
 import { useParams } from 'next/navigation'
+import type { Film } from '@/types'
 
 type Tab = 'teachers' | 'students' | 'researchers'
 
@@ -81,12 +81,17 @@ export default function EducationPage() {
   const params = useParams()
   const locale = (params?.locale as string) || 'ru'
   const [activeTab, setActiveTab] = useState<Tab>('teachers')
+  const [allFilms, setAllFilms] = useState<Film[]>([])
   const { title, subtitle } = pageTitles[locale as keyof typeof pageTitles] || pageTitles.ru
+
+  useEffect(() => {
+    fetch('/api/films').then((r) => r.json()).then(setAllFilms).catch(() => {})
+  }, [])
 
   const tabs: Tab[] = ['teachers', 'students', 'researchers']
   const tabContent = content[activeTab][locale as 'kk' | 'ru' | 'en'] || content[activeTab].ru
 
-  const tabFilms = films.filter((f) => tabContent.films.includes(f.slug))
+  const tabFilms = allFilms.filter((f) => tabContent.films.includes(f.slug))
 
   const downloadLabel = locale === 'kk' ? 'Жүктеу' : locale === 'en' ? 'Download' : 'Скачать'
 

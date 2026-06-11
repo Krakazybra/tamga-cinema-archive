@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbPersonToPerson } from '@/lib/content'
+import { dbPersonToPersonAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray, safeInt } from '@/lib/admin-auth'
 
 export async function GET() {
@@ -8,7 +8,7 @@ export async function GET() {
   if ('error' in check) return check.error
   try {
     const persons = await db.person.findMany({ orderBy: { nameRu: 'asc' } })
-    return NextResponse.json(persons.map(dbPersonToPerson))
+    return NextResponse.json(persons.map(dbPersonToPersonAdmin))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         featured: Boolean(body.featured),
       },
     })
-    return NextResponse.json(dbPersonToPerson(person), { status: 201 })
+    return NextResponse.json(dbPersonToPersonAdmin(person), { status: 201 })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Unique constraint')) return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })

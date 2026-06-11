@@ -4,21 +4,20 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { persons } from '@/data/persons'
 import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
-
-const personMap = new Map(persons.map((p) => [p.slug, p.name]))
 
 interface Props {
   films: Film[]
   locale: string
+  personNames?: Record<string, Record<string, string>>
 }
 
-export function HeroCarousel({ films, locale }: Props) {
+export function HeroCarousel({ films, locale, personNames }: Props) {
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
+    if (!films.length) return
     const id = setInterval(() => setCurrent((c) => (c + 1) % films.length), 6000)
     return () => clearInterval(id)
   }, [films.length])
@@ -28,9 +27,9 @@ export function HeroCarousel({ films, locale }: Props) {
   const film = films[current]
   const title = (film.title as Record<string, string>)[locale] ?? film.title.ru
   const synopsis = (film.synopsis as Record<string, string>)[locale] ?? film.synopsis.ru
-  const directorName = personMap.get(film.director)
-  const dirLabel = directorName
-    ? (directorName as Record<string, string>)[locale] ?? directorName.ru
+  const dirName = personNames?.[film.director]
+  const dirLabel = dirName
+    ? (dirName as Record<string, string>)[locale] ?? dirName.ru
     : film.director.replace(/-/g, ' ')
 
   const watchLabel = locale === 'kk' ? 'Қарау →' : locale === 'en' ? 'Watch →' : 'Смотреть →'
@@ -42,22 +41,24 @@ export function HeroCarousel({ films, locale }: Props) {
     <section className="relative min-h-[88vh] flex items-end md:items-center overflow-hidden bg-black">
       {/* Backdrop */}
       <AnimatePresence initial={false}>
-        <motion.div
-          key={`bg-${current}`}
-          className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-        >
-          <Image
-            src={film.banner}
-            alt=""
-            fill
-            className="object-cover"
-            priority
-          />
-        </motion.div>
+        {film.banner && (
+          <motion.div
+            key={`bg-${current}`}
+            className="absolute inset-0"
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          >
+            <Image
+              src={film.banner}
+              alt=""
+              fill
+              className="object-cover"
+              priority
+            />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Gradient overlays */}

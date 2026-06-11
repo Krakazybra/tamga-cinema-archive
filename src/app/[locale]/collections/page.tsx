@@ -1,7 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
-import { collections as staticCollections } from '@/data/collections'
+import { db } from '@/lib/db'
+import { dbCollectionToCollection } from '@/lib/content'
+
+// Read live from DB on every request so admin-panel edits (renamed
+// collections, covers) appear immediately instead of being frozen at build.
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -17,11 +22,9 @@ export default async function CollectionsPage({ params }: Props) {
   const { locale } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
   const { title, subtitle } = titles[loc] || titles.ru
-  const collections = [...staticCollections].sort((a, b) => {
-    const at = typeof a.title === 'string' ? a.title : a.title.ru
-    const bt = typeof b.title === 'string' ? b.title : b.title.ru
-    return at.localeCompare(bt)
-  })
+
+  const dbRows = await db.collection.findMany({ orderBy: { titleRu: 'asc' } }).catch(() => [])
+  const collections = dbRows.map(dbCollectionToCollection)
 
   const labels = {
     kk: { films: 'фильм', view: 'Жинақты қарау', collectionsCount: 'жинақ' },
@@ -54,13 +57,15 @@ export default async function CollectionsPage({ params }: Props) {
                 className="group block rounded-2xl overflow-hidden bg-[rgb(var(--card))] border border-[rgb(var(--border))]/20 hover:border-[rgb(var(--accent))]/40 transition-all duration-300"
               >
                 {/* COVER */}
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={col.cover}
-                    alt={col.title[loc]}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                <div className="relative h-48 overflow-hidden bg-[rgb(var(--surface))]">
+                  {col.cover && (
+                    <Image
+                      src={col.cover}
+                      alt={col.title[loc]}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--card))] via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4">
                     <span className="px-3 py-1 rounded-full bg-[rgb(var(--accent))]/90 text-black text-xs font-bold">

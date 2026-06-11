@@ -39,8 +39,8 @@ export function PersonCard({ person, locale, variant = 'default' }: PersonCardPr
   if (variant === 'mini') {
     return (
       <Link href={`/${locale}/persons/${person.slug}`} className="flex items-center gap-3 group">
-        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-          <Image src={person.photo} alt={name} fill className="object-cover" sizes="48px" />
+        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-[rgb(var(--card))]">
+          {person.photo && <Image src={person.photo} alt={name} fill className="object-cover" sizes="48px" />}
         </div>
         <div>
           <p className="text-sm font-medium group-hover:text-[rgb(var(--accent))] transition-colors">
@@ -68,13 +68,15 @@ export function PersonCard({ person, locale, variant = 'default' }: PersonCardPr
       <div className="rounded-2xl bg-[rgb(var(--card))] border border-[rgb(var(--border))]/20 overflow-hidden hover:border-[rgb(var(--accent))]/40 transition-all h-full flex flex-col">
         {/* Image area */}
         <div className="relative aspect-[3/4] bg-[rgb(var(--surface))] overflow-hidden flex-shrink-0">
-          <Image
-            src={person.photo}
-            alt={name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
-          />
+          {person.photo && (
+            <Image
+              src={person.photo}
+              alt={name}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
+            />
+          )}
           {/* Placeholder silhouette */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <svg viewBox="0 0 80 80" className="w-20 h-20 text-[rgb(var(--muted))]/20" fill="currentColor">

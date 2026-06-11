@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
-import { persons } from '@/data/persons'
-import { films } from '@/data/films'
+import { db } from '@/lib/db'
+import { dbPersonToPerson, dbFilmToFilm } from '@/lib/content'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -11,8 +11,9 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const person = persons.find((p) => p.slug === slug)
-  if (!person) return {}
+  const dbPerson = await db.person.findUnique({ where: { slug } }).catch(() => null)
+  if (!dbPerson) return {}
+  const person = dbPersonToPerson(dbPerson)
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
     title: `${person.name[loc]} | Қазақ Киносы`,
@@ -23,16 +24,23 @@ export async function generateMetadata({ params }: Props) {
 export default async function PersonDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const person = persons.find((p) => p.slug === slug)
 
-  if (!person) notFound()
+  const dbPerson = await db.person.findUnique({ where: { slug } }).catch(() => null)
+  if (!dbPerson) notFound()
 
-  const personFilms = films.filter((f) =>
-    f.director === person.slug ||
-    f.cast.includes(person.slug) ||
-    f.cinematographer === person.slug ||
-    f.screenwriter === person.slug
-  )
+  const person = dbPersonToPerson(dbPerson)
+
+  const dbFilmRows = await db.film.findMany({
+    where: {
+      OR: [
+        { director: slug },
+        { cast: { contains: slug } },
+        { cinematographer: slug },
+        { screenwriter: slug },
+      ],
+    },
+  }).catch(() => [])
+  const personFilms = dbFilmRows.map(dbFilmToFilm)
 
   const roleLabel: Record<string, Record<string, string>> = {
     kk: { director: 'Режиссер', actor: 'Актер', cinematographer: 'Оператор-қоюшы', writer: 'Сценарист', producer: 'Продюсер' },
@@ -54,14 +62,16 @@ export default async function PersonDetailPage({ params }: Props) {
           <AnimatedSection>
             <div className="flex flex-col md:flex-row gap-10">
               {/* PHOTO */}
-              <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden shadow-2xl shrink-0 mx-auto md:mx-0">
-                <Image
-                  src={person.photo}
-                  alt={person.name[loc]}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+              <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden shadow-2xl shrink-0 mx-auto md:mx-0 bg-[rgb(var(--card))]">
+                {person.photo && (
+                  <Image
+                    src={person.photo}
+                    alt={person.name[loc]}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                )}
               </div>
 
               {/* INFO */}

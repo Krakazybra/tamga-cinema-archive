@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
-import { collections } from '@/data/collections'
-import { films } from '@/data/films'
+import { db } from '@/lib/db'
+import { dbCollectionToCollection, dbFilmToFilm, safeParseArray } from '@/lib/content'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -11,24 +11,30 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug, locale } = await params
-  const collection = collections.find((c) => c.slug === slug)
-  if (!collection) return {}
+  const dbCol = await db.collection.findUnique({ where: { slug } }).catch(() => null)
+  if (!dbCol) return {}
+  const col = dbCollectionToCollection(dbCol)
   const loc = locale as 'kk' | 'ru' | 'en'
   return {
-    title: `${collection.title[loc]} | Қазақ Киносы`,
-    description: collection.description[loc],
-    openGraph: { images: [collection.cover] },
+    title: `${col.title[loc]} | Қазақ Киносы`,
+    description: col.description[loc],
+    openGraph: { images: col.cover ? [col.cover] : [] },
   }
 }
 
 export default async function CollectionDetailPage({ params }: Props) {
   const { locale, slug } = await params
   const loc = locale as 'kk' | 'ru' | 'en'
-  const collection = collections.find((c) => c.slug === slug)
 
-  if (!collection) notFound()
+  const dbCol = await db.collection.findUnique({ where: { slug } }).catch(() => null)
+  if (!dbCol) notFound()
 
-  const collectionFilms = films.filter((f) => collection.films.includes(f.slug))
+  const collection = dbCollectionToCollection(dbCol)
+  const filmSlugs = safeParseArray(dbCol.films)
+  const dbFilmRows = filmSlugs.length > 0
+    ? await db.film.findMany({ where: { slug: { in: filmSlugs } } }).catch(() => [])
+    : []
+  const collectionFilms = dbFilmRows.map(dbFilmToFilm)
 
   const labels = {
     kk: { curator: 'Куратордың ескертпелері', era: 'Дәуір', films: 'фильм' },
@@ -40,14 +46,16 @@ export default async function CollectionDetailPage({ params }: Props) {
   return (
       <main className="min-h-screen bg-[rgb(var(--background))] pt-20">
         {/* HERO */}
-        <section className="relative h-80 overflow-hidden">
-          <Image
-            src={collection.cover}
-            alt={collection.title[loc]}
-            fill
-            className="object-cover"
-            priority
-          />
+        <section className="relative h-80 overflow-hidden bg-[rgb(var(--card))]">
+          {collection.cover && (
+            <Image
+              src={collection.cover}
+              alt={collection.title[loc]}
+              fill
+              className="object-cover"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
             <span className="inline-block px-3 py-1 rounded-full bg-amber-500/90 text-black text-sm font-bold mb-4">
@@ -71,16 +79,18 @@ export default async function CollectionDetailPage({ params }: Props) {
           </AnimatedSection>
 
           {/* CURATOR NOTES */}
-          <AnimatedSection>
-            <div className="rounded-2xl bg-amber-500/10 border border-amber-500/30 p-8">
-              <h2 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
-                <span>◈</span> {t.curator}
-              </h2>
-              <p className="text-[rgb(var(--muted))] leading-relaxed italic">
-                {collection.curatorNotes[loc]}
-              </p>
-            </div>
-          </AnimatedSection>
+          {collection.curatorNotes[loc] && (
+            <AnimatedSection>
+              <div className="rounded-2xl bg-amber-500/10 border border-amber-500/30 p-8">
+                <h2 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                  <span>◈</span> {t.curator}
+                </h2>
+                <p className="text-[rgb(var(--muted))] leading-relaxed italic">
+                  {collection.curatorNotes[loc]}
+                </p>
+              </div>
+            </AnimatedSection>
+          )}
 
           {/* FILMS GRID */}
           <AnimatedSection>

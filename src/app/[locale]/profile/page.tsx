@@ -5,7 +5,6 @@ import { db } from '@/lib/db'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCard } from '@/components/films/FilmCard'
 import { FileUpload } from '@/components/upload/FileUpload'
-import { films as staticFilms } from '@/data/films'
 import { dbFilmToFilm } from '@/lib/content'
 
 interface Props {
@@ -68,12 +67,13 @@ export default async function ProfilePage({ params, searchParams }: Props) {
   const dbFavRows = likedSlugs.length > 0
     ? await db.film.findMany({ where: { slug: { in: likedSlugs } } }).catch(() => [])
     : []
-  const dbFavFilms = dbFavRows.map(dbFilmToFilm)
-  const dbFavSlugs = new Set(dbFavFilms.map((f) => f.slug))
-  const favFilms = [
-    ...dbFavFilms,
-    ...staticFilms.filter((f) => likedSlugs.includes(f.slug) && !dbFavSlugs.has(f.slug)),
-  ]
+  const favFilms = dbFavRows.map(dbFilmToFilm)
+
+  const commentFilmSlugs = userComments.map((c) => c.filmSlug)
+  const commentFilmRows = commentFilmSlugs.length > 0
+    ? await db.film.findMany({ where: { slug: { in: commentFilmSlugs } } }).catch(() => [])
+    : []
+  const commentFilmMap = new Map(commentFilmRows.map((f) => [f.slug, f]))
 
   const formatDate = (d: Date) =>
     new Intl.DateTimeFormat(loc === 'kk' ? 'kk-KZ' : loc === 'en' ? 'en-US' : 'ru-RU', {
@@ -165,7 +165,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                           href={`/${loc}/films/${c.filmSlug}`}
                           className="text-amber-400 hover:underline font-semibold"
                         >
-                          {staticFilms.find((f) => f.slug === c.filmSlug)?.title[loc] ?? c.filmSlug}
+                          {(() => { const f = commentFilmMap.get(c.filmSlug); return f ? (loc === 'kk' ? f.titleKk || f.titleRu : loc === 'en' ? f.titleEn || f.titleRu : f.titleRu) : c.filmSlug })()}
                         </Link>
                         <span className="text-[rgb(var(--muted))] text-sm">{formatDate(c.createdAt)}</span>
                       </div>

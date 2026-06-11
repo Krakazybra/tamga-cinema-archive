@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { dbCollectionToCollection } from '@/lib/content'
+import { dbCollectionToCollectionAdmin } from '@/lib/content'
 import { requireAdmin, ensureArray } from '@/lib/admin-auth'
 
 export async function GET() {
@@ -8,7 +8,7 @@ export async function GET() {
   if ('error' in check) return check.error
   try {
     const collections = await db.collection.findMany({ orderBy: { titleRu: 'asc' } })
-    return NextResponse.json(collections.map(dbCollectionToCollection))
+    return NextResponse.json(collections.map(dbCollectionToCollectionAdmin))
   } catch {
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         era: String(body.era ?? ''),
       },
     })
-    return NextResponse.json(dbCollectionToCollection(col), { status: 201 })
+    return NextResponse.json(dbCollectionToCollectionAdmin(col), { status: 201 })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'DB error'
     if (msg.includes('Unique constraint')) return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })

@@ -3,17 +3,28 @@ import Image from 'next/image'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { FilmCardLandscape } from '@/components/home/FilmCardLandscape'
 import { HeroCarousel } from '@/components/home/HeroCarousel'
-import { films as staticFilms } from '@/data/films'
-import { collections as staticCollections } from '@/data/collections'
+import { db } from '@/lib/db'
+import { dbFilmToFilm, dbCollectionToCollection, dbPersonToPerson } from '@/lib/content'
+
+// Read live from DB on every request so admin-panel edits (featured films,
+// posters, etc.) appear immediately instead of being frozen at build time.
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const films = [...staticFilms].sort((a, b) => b.year - a.year)
-  const collections = [...staticCollections].sort((a, b) => {
-    const at = typeof a.title === 'string' ? a.title : a.title.ru
-    const bt = typeof b.title === 'string' ? b.title : b.title.ru
-    return at.localeCompare(bt)
-  })
+
+  const [dbFilmRows, dbColRows, dbPersonRows] = await Promise.all([
+    db.film.findMany({ orderBy: { year: 'desc' } }).catch(() => []),
+    db.collection.findMany({ orderBy: { titleRu: 'asc' } }).catch(() => []),
+    db.person.findMany().catch(() => []),
+  ])
+
+  const films = dbFilmRows.map(dbFilmToFilm)
+  const collections = dbColRows.map(dbCollectionToCollection)
+  const personNames: Record<string, Record<string, string>> = {}
+  for (const p of dbPersonRows.map(dbPersonToPerson)) {
+    personNames[p.slug] = p.name as Record<string, string>
+  }
 
   const featured = films.filter((f) => f.featured)
 
@@ -44,7 +55,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="min-h-screen">
-      <HeroCarousel films={featured} locale={locale} />
+      <HeroCarousel films={featured} locale={locale} personNames={personNames} />
 
       {/* Films by Era — horizontal scroll */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -64,7 +75,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 scrollbar-none">
               {era.films.map((film) => (
                 <div key={film.slug} className="snap-start flex-shrink-0 w-64 sm:w-72">
-                  <FilmCardLandscape film={film} locale={locale} />
+                  <FilmCardLandscape film={film} locale={locale} personNames={personNames} />
                 </div>
               ))}
             </div>

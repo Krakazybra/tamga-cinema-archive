@@ -1,19 +1,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { persons } from '@/data/persons'
 import { getGenreLabel } from '@/lib/genres'
 import type { Film } from '@/types'
-
-const personMap = new Map(persons.map((p) => [p.slug, p.name]))
 
 interface Props {
   film: Film
   locale: string
+  personNames?: Record<string, Record<string, string>>
 }
 
-export function FilmCardLandscape({ film, locale }: Props) {
+export function FilmCardLandscape({ film, locale, personNames }: Props) {
   const title = (film.title as Record<string, string>)[locale] ?? film.title.ru
-  const dirName = personMap.get(film.director)
+  const dirName = personNames?.[film.director]
   const dirLabel = dirName
     ? (dirName as Record<string, string>)[locale] ?? dirName.ru
     : film.director.replace(/-/g, ' ')
@@ -21,13 +19,15 @@ export function FilmCardLandscape({ film, locale }: Props) {
   return (
     <Link href={`/${locale}/films/${film.slug}`} className="group block">
       <div className="relative aspect-video overflow-hidden rounded-xl bg-[rgb(var(--card))]">
-        <Image
-          src={film.poster}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 640px) 256px, 320px"
-        />
+        {film.poster && (
+          <Image
+            src={film.poster}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 640px) 256px, 320px"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
         {film.genres.slice(0, 1).map((g) => (
           <span

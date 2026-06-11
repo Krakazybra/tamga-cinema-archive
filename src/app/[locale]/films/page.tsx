@@ -30,6 +30,7 @@ function FilmsContent() {
   const [page, setPage] = useState(1)
   const [allFilms, setAllFilms] = useState<Film[]>([])
   const [personNameMap, setPersonNameMap] = useState<Map<string, LocalizedString>>(new Map())
+  const [personNamesRecord, setPersonNamesRecord] = useState<Record<string, { kk: string; ru: string; en: string }>>({})
   const { decade, genres, mediaType, language, director, studio, yearFrom, yearTo, setFilter, resetFilters } = useFiltersStore()
 
   useEffect(() => {
@@ -38,7 +39,13 @@ function FilmsContent() {
       fetch('/api/persons').then((r) => r.json()),
     ]).then(([films, persons]) => {
       setAllFilms(films)
-      setPersonNameMap(new Map((persons as Array<{ slug: string; name: LocalizedString }>).map((p) => [p.slug, p.name])))
+      const personList = persons as Array<{ slug: string; name: LocalizedString }>
+      setPersonNameMap(new Map(personList.map((p) => [p.slug, p.name])))
+      const record: Record<string, { kk: string; ru: string; en: string }> = {}
+      for (const p of personList) {
+        record[p.slug] = p.name as { kk: string; ru: string; en: string }
+      }
+      setPersonNamesRecord(record)
       setFuse(new Fuse(films, {
         keys: [
           { name: 'title.ru', weight: 2 },
@@ -277,7 +284,7 @@ function FilmsContent() {
                 : 'flex flex-col gap-4'
             }>
               {paginated.map((film) => (
-                <FilmCard key={film.slug} film={film} locale={locale} />
+                <FilmCard key={film.slug} film={film} locale={locale} personNames={personNamesRecord} />
               ))}
             </div>
             {hasMore && (
